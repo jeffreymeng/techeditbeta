@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Coming Soon - Techedit</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom fonts for this template -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+	<link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="css/coming-soon.min.css" rel="stylesheet">
+	<script src="/font-awesome/js/fa-brands.min.js"></script>
+	<script src="/font-awesome/js/fa-regular.min.js"></script>
+	<script src="/font-awesome/js/fontawesome.min.js"></script>
+	<style>
+		.overlay {
+			background: url("/img/coming-soon-bg.png") no-repeat center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+		
+		.hidden {
+		    display:none;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="overlay"></div>
+
+	<div class="masthead">
+		<div class="masthead-bg"></div>
+		<div class="container h-100">
+			<div class="row h-100">
+				<div class="col-12 my-auto">
+					<div class="masthead-content text-white py-5 py-md-0">
+						<h1 class="mb-3">Techedit Alpha</h1>
+						<p class="mb-5">We're working hard to finish the development of the new
+							<strong>Techedit</strong>. Our target launch date is <strong>March 2018</strong>.</p>
+							<!-- TODO: enter email, click next to show password box. enter password, click enter to enter beta -->
+						<div class="input-group input-group-newsletter" id="email-box">
+							<input type="email" class="form-control" placeholder="Email"  id="email">
+							<span class="input-group-btn">
+			                	<button class="btn btn-secondary" type="button" id="email-next">Next</button>
+			                </span>
+						</div>
+						<div class="input-group input-group-newsletter hidden" id="">
+							<input type="email" class="form-control" placeholder="Password" id="password">
+							<span class="input-group-btn">
+			                	<button class="btn btn-secondary" type="button" id="password-next">Enter!</button>
+			                </span>
+						</div>
+						<div class="hidden" id="error-box">
+						    <hr>
+						<p class="text-danger" id="error-text">Password Incorrect</p>
+						</div>
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="social-icons">
+		<ul class="list-unstyled text-center mb-0">
+			<li class="list-unstyled-item">
+				<a href="mailto:techeditbeta@jeffkmeng.com">
+            <i class="far fa-envelope"></i>
+          </a>
+			</li>
+
+		</ul>
+	</div>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $("#email-next").click(function(){
+            $("#email-box").addClass("hidden");
+            $("#password-box").removeClass("hidden");
+        });
+        $("#password-next").click(function(){
+            //TODO: authenticate
+            $("#password").value("");
+            $("#password-box").addClass("hidden");
+            $("#password-box").removeClass("hidden");
+            $("#error-text").html("Error: Email/Password combination incorrect");
+            $("#error-box").removeClass("hidden");
+        });
+    </script>
+
+</body>
+
+</html>
