@@ -58,7 +58,8 @@
 			                	<button class="btn btn-secondary" type="button" id="email-next">Next</button>
 			                </span>
 						</div>
-						<div class="input-group input-group-newsletter hidden" id="">
+						<p id="email-switch-box" class="hidden"><a href="#">Not <span class="email"></span>?</a></p>
+						<div class="input-group input-group-newsletter hidden" id="password-box">
 							<input type="email" class="form-control" placeholder="Password" id="password">
 							<span class="input-group-btn">
 			                	<button class="btn btn-secondary" type="button" id="password-next">Enter!</button>
@@ -95,6 +96,8 @@
     /* global $ */
         $("#email-next").click(function(){
             $("#email-box").addClass("hidden");
+            $(".email").html($("#email").val());
+            $("#email-switch-box").removeClass("hidden");
             $("#password-box").removeClass("hidden");
         });
         $("#password-next").click(function(){
@@ -109,6 +112,13 @@
             $("#password-box").removeClass("hidden");
             $("#error-text").html("Error: Email/Password combination incorrect");
             $("#error-box").removeClass("hidden");
+        });
+        $("#email-switch-box").click(function(){
+              $("#password").val("");
+              $("#email-switch-box").addClass("hidden");
+              $("#password-box").addClass("hidden");
+              $("#email-box").removeClass("hidden");
+
         });
     </script>
 
