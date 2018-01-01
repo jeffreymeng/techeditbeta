@@ -19,7 +19,7 @@
 	<link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
 	<!-- Custom styles for this template -->
-	<link href="css/coming-soon.min.css" rel="stylesheet">
+	<link href="/css/coming-soon.min.css" rel="stylesheet">
 	<script src="/font-awesome/js/fa-brands.min.js"></script>
 	<script src="/font-awesome/js/fa-regular.min.js"></script>
 	<script src="/font-awesome/js/fontawesome.min.js"></script>
@@ -92,12 +92,18 @@
 	<script src="/js/bootstrap.bundle.min.js"></script>
 
     <script>
+    /* global $ */
         $("#email-next").click(function(){
             $("#email-box").addClass("hidden");
             $("#password-box").removeClass("hidden");
         });
         $("#password-next").click(function(){
             //TODO: authenticate
+            console.log("Email:");
+            console.log($("#email").val());
+            console.log("Password:");
+            console.log($("#password").val());
+            
             $("#password").value("");
             $("#password-box").addClass("hidden");
             $("#password-box").removeClass("hidden");
