@@ -69,7 +69,10 @@
 						    <hr>
 						<p class="text-danger" id="error-text">Password Incorrect</p>
 						</div>
-						
+						   <br>
+						   <a href="/">
+							<p class="text-muted">Back to home page</p>
+						</a>
 						
 					</div>
 				</div>
@@ -94,31 +97,47 @@
 
     <script>
     /* global $ */
-        $("#email-next").click(function(){
-            $("#email-box").addClass("hidden");
-            $(".email").html($("#email").val());
-            $("#email-switch-box").removeClass("hidden");
-            $("#password-box").removeClass("hidden");
-        });
-        $("#password-next").click(function(){
-            //TODO: authenticate
-            console.log("Email:");
-            console.log($("#email").val());
-            console.log("Password:");
-            console.log($("#password").val());
-            
-            $("#password").val("");
-            $("#password-box").addClass("hidden");
-            $("#password-box").removeClass("hidden");
-            $("#error-text").html("Error: Email/Password combination incorrect");
-            $("#error-box").removeClass("hidden");
-        });
+        var onPasswordStep = false;//wether the email textbox or the password text box is shown
+        
+        $("#email-next").click(emailNext);
+        $("#password-next").click(passwordNext);
         $("#email-switch-box").click(function(){
+            onPasswordStep = false;
               $("#password").val("");
               $("#email-switch-box").addClass("hidden");
               $("#password-box").addClass("hidden");
               $("#email-box").removeClass("hidden");
 
+        });
+        function emailNext() {
+            onPasswordStep = true;
+            $("#email-box").addClass("hidden");
+            $(".email").html($("#email").val());
+            $("#email-switch-box").removeClass("hidden");
+            $("#password-box").removeClass("hidden");
+        }
+        function passwordNext() {
+            //TODO: authenticate
+            console.log("Email:");
+            console.log($("#email").val());
+            console.log("Password:");
+            console.log($("#password").val());
+            //if password is wrong:
+            onPasswordStep = false;
+            $("#password").val("");
+            $("#password-box").addClass("hidden");
+            $("#password-box").removeClass("hidden");
+            $("#error-text").html("Error: Email/Password combination incorrect");
+            $("#error-box").removeClass("hidden");
+        }
+        $("document").keypress(function(e) {
+            if(e.which == 13) {
+                if (onPasswordStep) {
+                    passwordNext();
+                } else {
+                    emailNext();
+                }
+            }
         });
     </script>
 
