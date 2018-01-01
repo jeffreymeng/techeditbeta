@@ -53,14 +53,14 @@
 							<strong>Techedit</strong>. Our target launch date is <strong>March 2018</strong>.</p>
 							<!-- TODO: enter email, click next to show password box. enter password, click enter to enter beta -->
 						<div class="input-group input-group-newsletter" id="email-box">
-							<input type="email" class="form-control" placeholder="Email"  id="email">
+							<input type="text" class="form-control" placeholder="Email"  id="email">
 							<span class="input-group-btn">
 			                	<button class="btn btn-secondary" type="button" id="email-next">Next</button>
 			                </span>
 						</div>
 						<p id="email-switch-box" class="hidden"><a href="#">Not <span class="email"></span>?</a></p>
 						<div class="input-group input-group-newsletter hidden" id="password-box">
-							<input type="email" class="form-control" placeholder="Password" id="password">
+							<input type="password" class="form-control" placeholder="Password" id="password">
 							<span class="input-group-btn">
 			                	<button class="btn btn-secondary" type="button" id="password-next">Enter!</button>
 			                </span>
@@ -107,7 +107,7 @@
             console.log("Password:");
             console.log($("#password").val());
             
-            $("#password").value("");
+            $("#password").val("");
             $("#password-box").addClass("hidden");
             $("#password-box").removeClass("hidden");
             $("#error-text").html("Error: Email/Password combination incorrect");
