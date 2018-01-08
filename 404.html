@@ -154,7 +154,7 @@
 						<div id="editor">hi</div>
 					</div>
 					<div class="card-footer text-muted text-right">
-						<span id="footer-position">19:9</span>&nbsp;&nbsp;<span id="footer-lang">HTML</span>&nbsp;&nbsp;<a id="footer-cog"><i class="fas fa-cog"></i></a>&nbsp;
+						<span id="footer-position">0:0</span>&nbsp;&nbsp;<span id="footer-lang">HTML</span>&nbsp;&nbsp;<a id="footer-cog"><i class="fas fa-cog"></i></a>&nbsp;
 					</div>
 				</div>
 			</div>
@@ -189,7 +189,7 @@
 		editor.getSession().selection.on('changeCursor', function(e) {
 			var pos = editor.getCursorPosition();
 			console.log(pos);
-			$("#footer-position").html(pos.row + ":" + pos.collumn)
+			$("#footer-position").html(pos.row + ":" + pos.column)
 });
 	</script>
 </body>
