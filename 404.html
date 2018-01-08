@@ -179,6 +179,9 @@
 		var editor = ace.edit("editor");
 		editor.setTheme("ace/theme/xcode");
 		editor.getSession().setMode("ace/mode/javascript");
+		editor.getSession().selection.on('changeCursor', function(e) {
+			console.log(editor.getCursorPosition());
+});
 	</script>
 </body>
 
