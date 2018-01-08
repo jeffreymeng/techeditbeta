@@ -1,5 +1,5 @@
 /*!
- * Font Awesome Pro 5.0.1 by @fontawesome - http://fontawesome.com
+ * Font Awesome Pro 5.0.2 by @fontawesome - http://fontawesome.com
  * License - http://fontawesome.com/license (Commercial License)
  */
 (function (global, factory) {
@@ -33,7 +33,13 @@ var NAMESPACE_IDENTIFIER = '___FONT_AWESOME___';
 
 
 
-
+var PRODUCTION = function () {
+  try {
+    return process.env.NODE_ENV === 'production';
+  } catch (e) {
+    return false;
+  }
+}();
 
 var oneToTen = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 var oneToTwenty = oneToTen.concat([11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
@@ -50,7 +56,7 @@ function bunker(fn) {
   try {
     fn();
   } catch (e) {
-    if (process.env.NODE_ENV !== 'production') {
+    if (!PRODUCTION) {
       throw e;
     }
   }

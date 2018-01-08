@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="A collaborative programming text editor">
+	<meta name="author" content="Techedit">
+
+	<title>Techedit</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/font-awesome/js/fa-brands.min.js"></script>
+	<script src="/font-awesome/js/fa-regular.min.js"></script>
+	<script src="/font-awesome/js/fontawesome.min.js"></script>
+	<!-- Custom styles for this template -->
+	<style>
+		body {
+			padding-top: 54px;
+		}
+
+		@media (min-width: 992px) {
+			body {
+				padding-top: 56px;
+			}
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		.invisible {
+			visibility: hidden;
+		}
+		
+		#footer-cog {
+			color:#717171;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Techedit</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="/">Home
+              </a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">About</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Services</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Contact</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- 404 Block -->
+	<div class="container hidden" id="block-404">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<h1 class="mt-5">404 Error</h1>
+				<p class="lead text-muted"><i>File Not Found</i></p>
+				<hr>
+				<p>There is no page at the current URL. It may have been renamed, moved, or deleted. If you typed a URL by hand, you may wish to double check your spelling.</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Code Block -->
+	<!-- TODO: add hidden when done testing. -->
+	<div class="container" id="block-code">
+		<div class="row">
+			<div class="col-lg-12">
+
+				<div class="card text-center" id="file-wrapper">
+					<div class="card-header" id="file-title">
+						index.html
+					</div>
+					<div class="card-body">
+						<div id="editor"></div>
+					</div>
+					<div class="card-footer text-muted text-right">
+						<span id="footer-position">19:9</span>&nbsp;&nbsp;<span id="footer-lang">HTML</span>&nbsp;&nbsp;<a id="footer-cog"><i class="fas fa-cog"></i></a>&nbsp;
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.bundle.min.js"></script>
+	<script src="/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/xcode");
+    editor.getSession().setMode("ace/mode/javascript");
+</script>
+</body>
+
+</html>
