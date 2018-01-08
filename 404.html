@@ -71,9 +71,10 @@
 			margin-top: 40px;
 			height: 600px;
 		}
+
 		#file-wrapper,
 		#chat-wrapper {
-			height:560px;
+			height: 560px;
 		}
 
 		#editor {
@@ -87,16 +88,23 @@
 			right: 0;
 			left: 0;
 		}
-		
+
 		.powered-by-firepad {
-            display: none;
-        }
-        #file-title {
-        	overflow-x:scroll;
-        }
-        #chat-msg-box {
-        	resize:none;
-        }
+			display: none;
+		}
+
+		#file-title {
+			overflow-x: scroll;
+		}
+
+		#chat-msg-box {
+			resize: none;
+		}
+		#options-sidebar {
+   position: fixed;
+   top: 8em;
+
+  } 
 	</style>
 
 </head>
@@ -179,7 +187,35 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="col-lg-3" id="modal-sidebar">
+					<ul class="nav flex-column">
+					<li class="nav-item">
+						<a class="nav-link active" href="#">Active</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link</a>
+					</li>
+					<!--<li class="nav-item">
+						<a class="nav-link disabled" href="#">Pro</a>
+					</li>-->
+				</ul>
+				</div>
+				
+				
 
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
 	<!-- Bootstrap core JavaScript -->
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/bootstrap.bundle.min.js"></script>
@@ -192,7 +228,7 @@
 			var pos = editor.getCursorPosition();
 			console.log(pos);
 			$("#footer-position").html(pos.row + ":" + pos.column)
-});
+		});
 	</script>
 </body>
 
