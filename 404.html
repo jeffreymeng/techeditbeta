@@ -187,7 +187,9 @@
 		editor.setTheme("ace/theme/xcode");
 		editor.getSession().setMode("ace/mode/javascript");
 		editor.getSession().selection.on('changeCursor', function(e) {
-			console.log(editor.getCursorPosition());
+			var pos = editor.getCursorPosition();
+			console.log(pos);
+			$("#footer-position").html(pos.row + ":" + pos.collumn)
 });
 	</script>
 </body>
