@@ -71,7 +71,10 @@
 			margin-top: 50px;
 			height: 600px;
 		}
-
+		#file-wrapper,
+		#chat-wrapper {
+			height:100%;
+		}
 
 		#editor {
 			margin-top: 50px;
@@ -146,11 +149,11 @@
 		<div class="row">
 			<div class="col-lg-8">
 
-				<div class="card text-center h-100" id="file-wrapper">
+				<div class="card text-center" id="file-wrapper">
 					<div class="card-header text-left" id="file-title">
 						index.html
 					</div>
-					<div class="card-body">
+					<div class="card-body" id="file-body">
 						<div id="editor">hi</div>
 					</div>
 					<div class="card-footer text-muted text-right">
@@ -160,7 +163,7 @@
 			</div>
 			<div class="col-lg-4">
 
-				<div class="card text-center h-100" id="chat-wrapper">
+				<div class="card" id="chat-wrapper">
 					<div class="card-header text-left" id="chat-title">
 						Chat
 					</div>
