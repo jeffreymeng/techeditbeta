@@ -41,14 +41,16 @@
 		}
 
 		#file-wrapper {
-			margin: 50px;
+			margin-top: 50px;
 		}
 
 		#editor {
 			position: absolute;
+			/*
 			top: 0;
-			right: 0;
 			bottom: 0;
+			*/
+			right: 0;
 			left: 0;
 		}
 	</style>
@@ -100,11 +102,25 @@
 	<!-- TODO: add hidden when done testing. -->
 	<div class="container" id="block-code">
 		<div class="row">
-			<div class="col-lg-12">
+			<div class="col-lg-8">
 
 				<div class="card text-center" id="file-wrapper">
 					<div class="card-header text-left" id="file-title">
 						index.html
+					</div>
+					<div class="card-body">
+						<div id="editor">hi</div>
+					</div>
+					<div class="card-footer text-muted text-right">
+						<span id="footer-position">19:9</span>&nbsp;&nbsp;<span id="footer-lang">HTML</span>&nbsp;&nbsp;<a id="footer-cog"><i class="fas fa-cog"></i></a>&nbsp;
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4">
+
+				<div class="card text-center" id="chat-wrapper">
+					<div class="card-header text-left" id="chat-title">
+						Chat
 					</div>
 					<div class="card-body">
 						<div id="editor">hi</div>
