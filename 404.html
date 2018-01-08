@@ -230,6 +230,9 @@
 		var editor = ace.edit("editor");
 		editor.setTheme("ace/theme/xcode");
 		editor.getSession().setMode("ace/mode/javascript");
+		editor.setShowPrintMargin(false);
+		editor.getSession().setUseWorker(false);
+
 		editor.getSession().selection.on('changeCursor', function(e) {
 			var pos = editor.getCursorPosition();
 			console.log(pos);
