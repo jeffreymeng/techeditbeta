@@ -12,7 +12,7 @@
 
 	<!-- Bootstrap core CSS -->
 	<link href="/css/bootstrap.min.css" rel="stylesheet">
-	
+
 	<script src="/font-awesome/js/fa-brands.min.js"></script>
 	<script src="/font-awesome/js/fa-regular.min.js"></script>
 	<script src="/font-awesome/js/fontawesome.min.js"></script>
@@ -35,12 +35,21 @@
 		.invisible {
 			visibility: hidden;
 		}
-		
+
 		#footer-cog {
-			color:#717171;
+			color: #717171;
 		}
+
 		#file-wrapper {
-			margin:100px;
+			margin: 50px;
+		}
+
+		#editor {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
 		}
 	</style>
 
@@ -92,7 +101,7 @@
 	<div class="container" id="block-code">
 		<div class="row">
 			<div class="col-lg-12">
-	
+
 				<div class="card text-center" id="file-wrapper">
 					<div class="card-header text-left" id="file-title">
 						index.html
@@ -112,11 +121,11 @@
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/bootstrap.bundle.min.js"></script>
 	<script src="/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/xcode");
-    editor.getSession().setMode("ace/mode/javascript");
-</script>
+	<script>
+		var editor = ace.edit("editor");
+		editor.setTheme("ace/theme/xcode");
+		editor.getSession().setMode("ace/mode/javascript");
+	</script>
 </body>
 
 </html>
