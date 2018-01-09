@@ -274,15 +274,15 @@
 			var ref = firebase.database().ref("/f/test/");
 
 			var editor = ace.edit("editor");
-
-
-			// Create Firepad.
-			var firepad = Firepad.fromACE(ref, editor);
-
 			editor.setTheme("ace/theme/xcode");
 			editor.getSession().setMode("ace/mode/javascript");
 			editor.setShowPrintMargin(false);
 			editor.getSession().setUseWorker(false);
+
+			// Create Firepad.
+			var firepad = Firepad.fromACE(ref, editor);
+
+
 
 			editor.getSession().selection.on('changeCursor', function(e) {
 				var pos = editor.getCursorPosition();
