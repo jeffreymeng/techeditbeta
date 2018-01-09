@@ -66,9 +66,10 @@
 		#footer-pos {
 			color: #717171;
 		}
+
 		#footer-cog:hover,
 		#footer-lang:hover {
-			color:#808080;
+			color: #808080;
 		}
 
 		#block-code,
@@ -81,7 +82,7 @@
 		#chat-wrapper {
 			height: 560px;
 		}
-		
+
 		#editor {
 			margin-top: 50px;
 			margin-bottom: 50px;
@@ -193,44 +194,51 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="option-modal-label" id="options" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-header">
-				<h5 class="modal-title">Options</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
+	<div class="modal" tabindex="-1" role="dialog" id="options">
+		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
-				<div class="col-lg-3" id="modal-sidebar">
-					<ul class="nav flex-column">
-						<li class="nav-item">
-							<a class="nav-link active" href="#">Active</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">Link</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">Link</a>
-						</li>
-						<!--<li class="nav-item">
+				<div class="modal-header">
+					<h5 class="modal-title">Options</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+
+						<div class="row">
+							<div class="col-md-3 ml-auto">
+								<ul class="nav flex-column">
+									<li class="nav-item">
+										<a class="nav-link active" href="#">Active</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#">Link</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#">Link</a>
+									</li>
+									<!--<li class="nav-item">
 						<a class="nav-link disabled" href="#">Pro</a>
 					</li>-->
-					</ul>
+								</ul>
+							</div>
+							<div class="col-md-9 ml-auto">
+								<h2>Hi</h2>
+							</div>
+						</div>
+
+					</div>
 				</div>
-				<div class="col-lg-9" id="modal-content">
-					hi
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary">Save changes</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				</div>
-
-
-
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
 	</div>
+
+	
 	<!-- Bootstrap core JavaScript -->
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/bootstrap.bundle.min.js"></script>
