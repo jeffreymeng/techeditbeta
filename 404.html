@@ -199,7 +199,7 @@
 						<div id="editor"></div>
 					</div>
 					<div class="card-footer text-muted text-right">
-						<span id="footer-position">0:0</span>&nbsp;&nbsp;<span id="footer-lang">JS</span>&nbsp;&nbsp;<a id="footer-cog" href='javascript:void(0)'><i class="fas fa-cog"></i></a>&nbsp;
+						<span id="footer-position">1:1</span>&nbsp;&nbsp;<span id="footer-lang">JS</span>&nbsp;&nbsp;<a id="footer-cog" href='javascript:void(0)'><i class="fas fa-cog"></i></a>&nbsp;
 					</div>
 				</div>
 			</div>
@@ -302,8 +302,8 @@
 
 		editor.getSession().selection.on('changeCursor', function(e) {
 			var pos = editor.getCursorPosition();
-			console.log(pos);
-			$("#footer-position").html(pos.row + ":" + pos.column);
+			//console.log(pos);
+			$("#footer-position").html((pos.row + 1) + ":" + (pos.column + 1));
 		});
 		$("#footer-cog").click(function() {
 			$("#options").modal("show");
