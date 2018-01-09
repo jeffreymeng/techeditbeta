@@ -9,7 +9,9 @@
 	<meta name="author" content="Techedit">
 
 	<title>Techedit</title>
-	<!-- Favicon -->
+
+
+	<!-- Favicons -->
 
 	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="/favicon/apple-touch-icon-57x57.png" />
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/favicon/apple-touch-icon-114x114.png" />
@@ -32,15 +34,23 @@
 	<meta name="msapplication-wide310x150logo" content="/favicon/mstile-310x150.png" />
 	<meta name="msapplication-square310x310logo" content="/favicon/mstile-310x310.png" />
 
-	<!-- End Favicon -->
+	<!-- End Favicons -->
+
 	<!-- Bootstrap core CSS -->
 	<link href="/css/bootstrap.min.css" rel="stylesheet">
 
+	<!-- Font Awesome Icons TODO: subset useed fonts to increase load time -->
 	<script src="/font-awesome/js/fa-brands.min.js"></script>
 	<script src="/font-awesome/js/fa-regular.min.js"></script>
 	<script src="/font-awesome/js/fa-solid.min.js"></script>
 	<script src="/font-awesome/js/fontawesome.min.js"></script>
-	<!-- Custom styles for this template -->
+
+	<!-- Firebase and Firepad -->
+	<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+	<script src="/js/firepad.min.js"></script>
+	<link href="/css/firepad.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
 	<style>
 		body {
 			padding-top: 54px;
@@ -159,7 +169,7 @@
 
 	<!-- Code Block -->
 	<!-- TODO: add hidden when done testing. -->
-	<div class="container" id="block-code">
+	<div class="container hidden" id="block-code">
 		<div class="row">
 			<div class="col-lg-8">
 
@@ -238,27 +248,57 @@
 		</div>
 	</div>
 
-	
+
+
+
+
 	<!-- Bootstrap core JavaScript -->
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/bootstrap.bundle.min.js"></script>
 	<script src="/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script>
-		var editor = ace.edit("editor");
-		editor.setTheme("ace/theme/xcode");
-		editor.getSession().setMode("ace/mode/javascript");
-		editor.setShowPrintMargin(false);
-		editor.getSession().setUseWorker(false);
+		/* global firebase ace Firepad $*/
+		function init() {
 
-		editor.getSession().selection.on('changeCursor', function(e) {
-			var pos = editor.getCursorPosition();
-			console.log(pos);
-			$("#footer-position").html(pos.row + ":" + pos.column)
-		});
-		$("#footer-cog").click(function() {
-			$("#options").modal("show");
-		});
+
+			var config = {
+				apiKey: "AIzaSyBQ2E4ISQoIcRsDxfPxzDjbJwmD-r98JYw",
+				authDomain: "techedit-63e7f.firebaseapp.com",
+				databaseURL: "https://techedit-63e7f.firebaseio.com",
+				projectId: "techedit-63e7f",
+				storageBucket: "techedit-63e7f.appspot.com",
+				messagingSenderId: "609280907475"
+			};
+			firebase.initializeApp(config);
+			// Get Firebase Database reference.
+			var ref = firebase.database().ref("/f/test/");
+
+			var editor = ace.edit("editor");
+
+
+			// Create Firepad.
+			var firepad = Firepad.fromACE(ref, editor);
+
+			editor.setTheme("ace/theme/xcode");
+			editor.getSession().setMode("ace/mode/javascript");
+			editor.setShowPrintMargin(false);
+			editor.getSession().setUseWorker(false);
+
+			editor.getSession().selection.on('changeCursor', function(e) {
+				var pos = editor.getCursorPosition();
+				console.log(pos);
+				$("#footer-position").html(pos.row + ":" + pos.column);
+			});
+			$("#footer-cog").click(function() {
+				$("#options").modal("show");
+			});
+			firepad.on('ready', function() {
+				$("#block-code").removeClass("hidden");
+			});
+		}
+		init();
 	</script>
+
 </body>
 
 </html>
