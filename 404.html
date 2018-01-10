@@ -131,7 +131,7 @@
 		/* Aesthetics */
 
 		#file-title {
-			overflow-x: scroll;
+			overflow-x: auto;
 			white-space: nowrap;
 		}
 
@@ -143,6 +143,10 @@
 			position: fixed;
 			top: 8em;
 
+		}
+		
+		#messages {
+			overflow-y:auto;
 		}
 	</style>
 
@@ -214,7 +218,7 @@
 						Chat
 					</div>
 					<div class="card-body" id="chat-messages">
-						<p id="no-msg" class="text-muted">No Messages Yet. Be the first!</p>
+						<p id="no-msg" class="text-muted hidden">No Messages Yet. Be the first!</p>
 					</div>
 					<div class="card-footer text-muted text-right">
 						<textarea class="form-control" placeholder="Message..." id="chat-msg-box"></textarea>
@@ -352,7 +356,7 @@
 			// Get Firebase Database reference.
 			var ref = firebase.database().ref("/f/test/");
 			var chatRef = firebase.database().ref("/f/test/chat/");
-
+		
 			//Set up ace
 			var editor = ace.edit("editor");
 			editor.setTheme("ace/theme/xcode");
@@ -380,13 +384,16 @@
 			firepad.on('ready', function() {
 				$("#block-code").removeClass("hidden");
 			});
-
+			
+			
 			//use the child added event on the last 50(for initalization), 
 			//so the first 50 messages are loaded, and then all new messages are loaded.
 			chatRef.orderByKey().limitToLast(50).on('child_added', function(data) {
 				$("#chat-messages").append("<p class='message'>" + data.val() + "</p>");
 			});
-
+			chatRef.once("value").then(function(){
+				
+			});
 			//when enter is presed, simulate a send button click.
 			$("#chat-msg-box").keyup(function(e) {
 				var keyCode;
@@ -404,11 +411,13 @@
 					//Send the message if only the enter key is pressed
 					$("#msg-send").click();
 					event.stopPropagation();
+					return false;
 				}
 				else if ((e.shiftKey && (keyCode == 13)) || (keyCode == 10)) {
 					//If they type shift+enter, we insert a new line.
 					insertAtCaret("chat-msg-box", "\n");
 					event.stopPropagation();
+					return false;
 				}
 			});
 			//send a message.
