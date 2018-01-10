@@ -448,10 +448,11 @@
 		//send a message.
 		$("#msg-send").click(function() {
 			//send the message to firebase.
-			chatRef.push(converter.makeHTML($("#chat-msg-box").val().replaceAll("<", "&lt;").replaceAll(">", "&gt;")));
+			chatRef.push(converter.makeHtml($("#chat-msg-box").val().replaceAll("<", "&lt;").replaceAll(">", "&gt;")));
 			//clear the textarea and restore focus.
 			$("#chat-msg-box").val("");
 			$("#chat-msg-box").focus();
+			
 		});
 		
 	</script>
