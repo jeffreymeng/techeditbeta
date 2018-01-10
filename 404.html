@@ -218,7 +218,7 @@
 						Chat
 					</div>
 					<div class="card-body" id="chat-messages">
-						<p id="no-msg" class="text-muted hidden">No Messages Yet. Be the first!</p>
+						<p id="no-msg" class="text-muted">No Messages Yet. Be the first!</p>
 					</div>
 					<div class="card-footer text-muted text-right">
 						<textarea class="form-control" placeholder="Message..." id="chat-msg-box"></textarea>
@@ -390,10 +390,12 @@
 			//so the first 50 messages are loaded, and then all new messages are loaded.
 			chatRef.orderByKey().limitToLast(50).on('child_added', function(data) {
 				$("#chat-messages").append("<p class='message'>" + data.val() + "</p>");
+				// as soon as a message is loaded, we remove the no messages text.
+				if ($("#no-msg").hasClass("hidden")) {
+					$("#no-msg").removeClass("hidden")
+				}
 			});
-			chatRef.once("value").then(function(){
-				
-			});
+			
 			//when enter is presed, simulate a send button click.
 			$("#chat-msg-box").keyup(function(e) {
 				var keyCode;
