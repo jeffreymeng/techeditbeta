@@ -394,7 +394,7 @@
 				$("#chat-messages").append("<p class='message'>" + data.val() + "</p>");
 				// as soon as a message is loaded, we remove the no messages text.
 				if ($("#no-msg").hasClass("hidden")) {
-					$("#no-msg").removeClass("hidden")
+					$("#no-msg").addClass("hidden");
 				}
 			});
 
