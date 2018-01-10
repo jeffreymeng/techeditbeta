@@ -150,6 +150,11 @@
 			overflow-wrap: normal;
 
 		}
+		
+		#name-enter,
+		#msg-send {
+			margin-top:20px;
+		}
 	</style>
 
 </head>
@@ -222,14 +227,15 @@
 					<div class="card-body" id="chat-messages">
 						<p id="no-msg" class="text-muted">No Messages Yet. Be the first!</p>
 					</div>
-					<div class="card-footer text-muted text-right" id="footer-send">
-						<textarea class="form-control" placeholder="Message..." id="chat-msg-box"></textarea>
-						<br>
-						<button class="btn btn-primary btn-block" id="msg-send">Send</button>
+					<div class="card-footer text-muted text-right hidden " id="footer-send">
+						<label for="name">Name:</label>
+						<input class="form-control" placeholder="Message..." id="name">
+						
+						<button class="btn btn-primary btn-block" id="name-enter">Send</button>
 					</div>
 					<div class="card-footer text-muted text-right" id="footer-name">
 						<textarea class="form-control" placeholder="Message..." id="chat-msg-box"></textarea>
-						<br>
+						
 						<button class="btn btn-primary btn-block" id="msg-send">Send</button>
 					</div>
 				</div>
@@ -301,6 +307,7 @@
 	<!-- Bootstrap core JavaScript -->
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/showdown.min.js"></script>
 	<script>
 		/* global firebase ace Firepad $*/
 
