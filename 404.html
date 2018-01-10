@@ -144,9 +144,9 @@
 			top: 8em;
 
 		}
-		
+
 		#chat-messages {
-			overflow-y:auto;
+			overflow-y: auto;
 			overflow-wrap: normal;
 
 		}
@@ -358,7 +358,7 @@
 			// Get Firebase Database reference.
 			var ref = firebase.database().ref("/f/test/");
 			var chatRef = firebase.database().ref("/f/test/chat/");
-		
+
 			//Set up ace
 			var editor = ace.edit("editor");
 			editor.setTheme("ace/theme/xcode");
@@ -386,8 +386,8 @@
 			firepad.on('ready', function() {
 				$("#block-code").removeClass("hidden");
 			});
-			
-			
+
+
 			//use the child added event on the last 50(for initalization), 
 			//so the first 50 messages are loaded, and then all new messages are loaded.
 			chatRef.orderByKey().limitToLast(50).on('child_added', function(data) {
@@ -397,7 +397,7 @@
 					$("#no-msg").removeClass("hidden")
 				}
 			});
-			
+
 			//when enter is presed, simulate a send button click.
 			$("#chat-msg-box").keyup(function(e) {
 				var keyCode;
@@ -414,15 +414,16 @@
 				if ((!e.shiftKey && (keyCode == 13))) {
 					//Send the message if only the enter key is pressed
 					$("#msg-send").click();
-					event.stopPropagation();
-					return false;
+
 				}
 				else if ((e.shiftKey && (keyCode == 13)) || (keyCode == 10)) {
 					//If they type shift+enter, we insert a new line.
 					insertAtCaret("chat-msg-box", "\n");
-					event.stopPropagation();
-					return false;
+
 				}
+				e.stopPropagation();
+				e.preventDefault();
+				return false;
 			});
 			//send a message.
 			$("#msg-send").click(function() {
