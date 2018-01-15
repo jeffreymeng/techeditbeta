@@ -429,10 +429,9 @@
 
 		//when enter is presed, simulate a send button click.
 		$("#chat-msg-box").keydown(function(e) {
-			e.preventDefault();
 			var keyCode;
 			if (e.keyCode == 13) {
-				//e.preventDefault();
+				e.preventDefault();
 			}
 			if (window.event) {
 				keyCode = window.event.keyCode;
@@ -448,12 +447,11 @@
 			}
 			else if ((e.shiftKey && (keyCode == 13)) || (keyCode == 10)) {
 				//If they type shift+enter, we insert a new line.
-				//insertAtCaret("chat-msg-box", "\n");
+				insertAtCaret("chat-msg-box", "\n");
 
 			}
-			//e.stopPropagation();
-			//e.preventDefault();
-			return false;
+			
+			//return false;
 		});
 		//send a message.
 		$("#msg-send").click(function() {
