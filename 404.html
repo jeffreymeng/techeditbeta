@@ -140,7 +140,8 @@
 		}
 
 		#options-sidebar {
-			position: fixed;
+			position: sticky;
+			top:50px;
 			top: 8em;
 
 		}
@@ -407,11 +408,15 @@
 		//so the first 50 messages are loaded, and then all new messages are loaded.
 		chatRef.orderByKey().limitToLast(50).on('child_added', function(data) {
 			$("#chat-messages").append("<p class='message'>" + data.val() + "</p>");
+			//scroll to bottom
+			$('#chat-messages').stop().animate({
+			  scrollTop: $('#chat-messages')[0].scrollHeight
+			}, 800);
 			// as soon as a message is loaded, we remove the no messages text.
 			if (!$("#no-msg").hasClass("hidden")) {
 				$("#no-msg").addClass("hidden");
 			}
-			$("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
+
 		});
 		//Initalize ShowDown, a markdown parser for the chat.
 		var converter = new showdown.Converter({
@@ -460,7 +465,15 @@
 		});
 
 		//if the user is already scrolled to the bottom of the message div, we autoscroll on new messages.
-		$("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
+		//$("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
+		$('#flux').on('scroll', function() {
+        if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+            alert('end reached');
+        }
+    })
+		$('#chat-messages').stop().animate({
+			  scrollTop: $('#chat-messages')[0].scrollHeight
+			}, 800);
 	</script>
 
 
