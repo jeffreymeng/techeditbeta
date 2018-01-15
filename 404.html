@@ -155,6 +155,9 @@
 		#msg-send {
 			margin-top: 20px;
 		}
+		#options-nav {
+			position:sticky;
+		}
 	</style>
 
 </head>
@@ -408,6 +411,7 @@
 			if (!$("#no-msg").hasClass("hidden")) {
 				$("#no-msg").addClass("hidden");
 			}
+			$("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
 		});
 		//Initalize ShowDown, a markdown parser for the chat.
 		var converter = new showdown.Converter({
