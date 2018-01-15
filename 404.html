@@ -409,14 +409,16 @@
 		//so the first 50 messages are loaded, and then all new messages are loaded.
 		chatRef.orderByKey().limitToLast(50).on('child_added', function(data) {
 			$("#chat-messages").append("<div class='message'>" + data.val() + "</div>");
-			//scroll to bottom
-			$('#chat-messages').stop().animate({
-				scrollTop: $('#chat-messages')[0].scrollHeight
-			}, 800);
+			
 			// as soon as a message is loaded, we remove the no messages text.
 			if (!$("#no-msg").hasClass("hidden")) {
 				$("#no-msg").addClass("hidden");
 			}
+			
+			//scroll to bottom
+			$('#chat-messages').stop().animate({
+				scrollTop: $('#chat-messages')[0].scrollHeight
+			}, 800);
 
 		});
 		//Initalize ShowDown, a markdown parser for the chat.
