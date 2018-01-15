@@ -486,7 +486,7 @@
 				first = false;
 			}
 			else {
-				if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+				if ($("#chat-messages").scrollTop() + $("#chat-messages").innerHeight() >= $("#chat-messages")[0].scrollHeight) {
 					//scroll to bottom
 					console.log("At bottom: Scrolled")
 					$('#chat-messages').stop().animate({
@@ -496,6 +496,7 @@
 					console.log("Not At bottom: Did not scroll")
 				}
 			}
+			
 			$("#chat-messages").append("<div class='message'>" + data.val() + "</div>");
 
 			// as soon as a message is loaded, we remove the no messages text.
