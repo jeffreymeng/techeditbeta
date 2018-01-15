@@ -429,6 +429,7 @@
 
 		//when enter is presed, simulate a send button click.
 		$("#chat-msg-box").keyup(function(e) {
+			event.preventDefault();
 			var keyCode;
 			if (e.keyCode == 13) {
 
@@ -451,7 +452,7 @@
 
 			}
 			//e.stopPropagation();
-			e.preventDefault();
+			//e.preventDefault();
 			return false;
 		});
 		//send a message.
