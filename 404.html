@@ -129,7 +129,11 @@
 
 
 		/* Aesthetics */
-
+		
+		#latest-msg-box {
+			width:100%;
+		}
+		
 		#file-title {
 			overflow-x: auto;
 			white-space: nowrap;
@@ -152,7 +156,8 @@
 			overflow-wrap: normal;
 
 		}
-
+		
+		
 		.shadow {
 			-moz-box-shadow: 0 0 3px #ccc;
 			-webkit-box-shadow: 0 0 3px #ccc;
@@ -310,7 +315,9 @@
 						Chat
 					</div>
 					<div class="card-body" id="chat-messages">
-						<a href="#" class="badge badge-primary shadow" id="latest-msg">Latest Message</a>
+						<div id="latest-msg-box" class="text-center">
+							<a href="#" class="badge badge-primary shadow" id="latest-msg">Latest Message</a>
+						</div> 
 
 						<p id="no-msg" class="text-muted">No Messages Yet. Be the first!</p>
 						<div class="spinner" id="chat-spinner">
