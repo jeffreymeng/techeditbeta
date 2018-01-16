@@ -448,17 +448,7 @@
 			txtarea.scrollTop = scrollPos;
 		}
 
-		function chatScrollPercentage() {
 
-
-			var currY = $("#chat-messages").scrollTop();
-			var postHeight = $("#chat-messages").height();
-			var scrollHeight = $("#chat-messages").height();
-			// Current percentual position, in decimal format e.g. 71% = 0.71
-			var scrollPercent = (currY / (scrollHeight - postHeight));
-
-			return scrollPercent;
-		}
 
 		//initalize firebase
 		var config = {
@@ -522,7 +512,7 @@
 				first = false;
 			}
 			else {
-				if (chatScrollPercentage() === 1) {
+				if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
 					//scroll to bottom
 					console.log("At bottom: Scrolled")
 					$('#chat-messages').stop().animate({
