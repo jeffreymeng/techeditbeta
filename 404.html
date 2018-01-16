@@ -156,7 +156,10 @@
 			overflow-wrap: normal;
 
 		}
-
+		#latest-msg-box {
+			position: sticky;
+			top: 20px;
+		}
 
 		.shadow {
 			-moz-box-shadow: 0 0 3px #ccc;
@@ -600,14 +603,14 @@
 		$('#chat-messages').on('scroll', function() {
 			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
 				//scrolled to bottom
-				$("#latest-msg").addClass("hidden");
+				$("#latest-msg-box").addClass("hidden");
 			}
 			else {
-				$("#latest-msg").removeClass("hidden");
+				$("#latest-msg-box").removeClass("hidden");
 			}
 		});
 
-		$('#latest-msg').click(function() {
+		$('#latest-msg-box').click(function() {
 			$('#chat-messages').stop().animate({
 				scrollTop: $('#chat-messages')[0].scrollHeight
 			}, 800);
