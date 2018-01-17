@@ -516,7 +516,7 @@
 
 			$("#chat-messages").append("<div class='message' id='msg_" + data.key + "'data-key='" + data.key + "'>" + data.val() + "</div>");
 
-			if ($("#chat-messages").scrollTop() + $("#chat-messages").innerHeight() >= $("#chat-messages")[0].scrollHeight) {
+			if ($("#chat-messages").scrollTop() + $("#chat-messages").innerHeight() >= $("#chat-messages").scrollHeight) {
 				//scroll to bottom
 				console.log("At bottom: Scrolled");
 				$('#chat-messages').stop().animate({
