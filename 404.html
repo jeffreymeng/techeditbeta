@@ -97,8 +97,10 @@
 			margin-bottom: 51px;
 			/* file-wrapper height - margin top - margin bottom*/
 			height: 460px;
+			height:80%;
 		}
-
+		
+		
 		.firepad,
 		#editor {
 
@@ -306,7 +308,7 @@
 						<div id="editor"></div>
 					</div>
 					<div class="card-footer text-muted text-right">
-						<span id="footer-position">1:1</span>&nbsp;&nbsp;<span id="footer-lang">HTML</span>&nbsp;&nbsp;<a id="footer-cog" href='javascript:void(0)'><i class="fas fa-cog"></i></a>&nbsp;
+						<span id="footer-position">1:1</span>&nbsp;&nbsp;<span id="footer-lang">HTML</span>&nbsp;&nbsp;<a id="footer-cog" href="javascript:void(0)"><i class="fas fa-cog"></i></a>&nbsp;
 					</div>
 				</div>
 			</div>
@@ -415,7 +417,7 @@
 		//some utility function
 		String.prototype.replaceAll = function(search, replacement) {
 			var target = this;
-			return target.replace(new RegExp(search, 'g'), replacement);
+			return target.replace(new RegExp(search, "g"), replacement);
 		};
 
 		function insertAtCaret(areaId, text) {
@@ -424,12 +426,12 @@
 
 			var scrollPos = txtarea.scrollTop;
 			var strPos = 0;
-			var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ?
+			var br = ((txtarea.selectionStart || txtarea.selectionStart == "0") ?
 				"ff" : (document.selection ? "ie" : false));
 			if (br == "ie") {
 				txtarea.focus();
 				var range = document.selection.createRange();
-				range.moveStart('character', -txtarea.value.length);
+				range.moveStart("character", -txtarea.value.length);
 				strPos = range.text.length;
 			}
 			else if (br == "ff") {
@@ -443,9 +445,9 @@
 			if (br == "ie") {
 				txtarea.focus();
 				var ieRange = document.selection.createRange();
-				ieRange.moveStart('character', -txtarea.value.length);
-				ieRange.moveStart('character', strPos);
-				ieRange.moveEnd('character', 0);
+				ieRange.moveStart("character", -txtarea.value.length);
+				ieRange.moveStart("character", strPos);
+				ieRange.moveEnd("character", 0);
 				ieRange.select();
 			}
 			else if (br == "ff") {
@@ -471,8 +473,8 @@
 		firebase.initializeApp(config);
 
 		//key of latest message
-		var lastMsg;
-		var newMessages;
+		//var lastMsg;
+		//var newMessages;
 		// Get Firebase Database reference.
 		var ref = firebase.database().ref("/f/test/");
 		var chatRef = firebase.database().ref("/f/test/chat/");
@@ -489,7 +491,7 @@
 
 
 		//initate the position tracker
-		editor.getSession().selection.on('changeCursor', function(e) {
+		editor.getSession().selection.on("changeCursor", function(e) {
 			var pos = editor.getCursorPosition();
 			//console.log(pos);
 			$("#footer-position").html((pos.row + 1) + ":" + (pos.column + 1));
@@ -501,8 +503,8 @@
 		});
 
 		//show the editor only when firepad and ace are ready
-		firepad.on('ready', function() {
-			$('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+		firepad.on("ready", function() {
+			$("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
 
 			$("#block-load").addClass("hidden");
 			$("#block-code").removeClass("hidden");
@@ -513,39 +515,39 @@
 		//so the first 50 messages are loaded, and then all new messages are loaded.
 		var numLoaded = 0;
 		var numToLoad = 50;
-		chatRef.orderByKey().limitToLast(numToLoad).on('child_added', function(data) {
+		chatRef.orderByKey().limitToLast(numToLoad).on("child_added", function(data) {
 			if (numLoaded < numToLoad) {
 				console.log("Only " + (numLoaded + 1) + " loaded: Scrolled");
-				$('#chat-messages').on('scroll', chatScrollHandler);
+				//$("#chat-messages").on("scroll", chatScrollHandler);
 				// "pause the scroll handler"
-				$('#chat-messages').off('scroll');
+				$("#chat-messages").off("scroll");
 				//scroll
-				$('#chat-messages').stop().animate({
-					scrollTop: $('#chat-messages')[0].scrollHeight
+				$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
 				}, 800);
 				//"unpause" the scroll back to latest btn
-				$('#chat-messages').on('scroll', chatScrollHandler);
+				$("#chat-messages").on("scroll", chatScrollHandler);
 				numLoaded++;
 			}
 			else if ($("#chat-messages")[0].scrollHeight - $("#chat-messages").scrollTop() == $("#chat-messages").innerHeight()) {
 				//scroll to bottom
 				console.log("At bottom: Scrolled");
-				$('#chat-messages').on('scroll', chatScrollHandler);
+				//$("#chat-messages").on("scroll", chatScrollHandler);
 				// "pause the scroll handler"
-				$('#chat-messages').off('scroll');
+				$("#chat-messages").off("scroll");
 				//scrolls
-				$('#chat-messages').stop().animate({
-					scrollTop: $('#chat-messages')[0].scrollHeight
+				$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
 				}, 800);
 				//"unpause" the scroll back to latest btn
-				$('#chat-messages').on('scroll', chatScrollHandler);
+				$("#chat-messages").on("scroll", chatScrollHandler);
 
 			}
 			else {
 				console.log("Not At bottom: Did not scroll");
 			}
 
-			$("#chat-messages").append("<div class='message' id='msg_" + data.key + "'data-key='" + data.key + "'>" + data.val() + "</div>");
+			$("#chat-messages").append("<div class='message' id='msg_'" + data.key + "'data-key='" + data.key + "'>" + data.val() + "</div>");
 
 			// as soon as a message is loaded, we remove the no messages text.
 			if (!$("#no-msg").hasClass("hidden")) {
@@ -606,7 +608,7 @@
 
 		//if the user is already scrolled to the bottom of the message div, we autoscroll on new messages.
 		//$("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
-		$('#chat-messages').on('scroll', chatScrollHandler);
+		$("#chat-messages").on("scroll", chatScrollHandler);
 
 		function chatScrollHandler() {
 			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
@@ -617,10 +619,10 @@
 				$("#latest-msg").removeClass("hidden");
 			}
 		}
-		/*$('#latest-msg, #latest-msg-box').click(latestMsgHandler);*/
+		/*$("#latest-msg, #latest-msg-box").click(latestMsgHandler);*/
 		function latestMsgHandler() {
-			$('#chat-messages').stop().animate({
-				scrollTop: $('#chat-messages')[0].scrollHeight
+			$("#chat-messages").stop().animate({
+				scrollTop: $("#chat-messages")[0].scrollHeight
 			}, 800);
 		}
 	</script>
