@@ -514,7 +514,7 @@
 		var numLoaded = 0;
 		chatRef.orderByKey().limitToLast(50).on('child_added', function(data) {
 
-			$("#chat-messages").append("<div class='message' id='msg_" + data.key + "'data-key='" + data.key + "'>" + data.val() + "</div>");
+			
 			if (numLoaded <= 50) {
 				console.log("Only " + numLoaded + " loaded: Scrolled");
 				$('#chat-messages').stop().animate({
@@ -532,7 +532,7 @@
 				console.log("Not At bottom: Did not scroll");
 			}
 
-
+			$("#chat-messages").append("<div class='message' id='msg_" + data.key + "'data-key='" + data.key + "'>" + data.val() + "</div>");
 
 			// as soon as a message is loaded, we remove the no messages text.
 			if (!$("#no-msg").hasClass("hidden")) {
