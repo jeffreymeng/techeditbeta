@@ -511,12 +511,17 @@
 
 		//use the child added event on the last 50(for initalization), 
 		//so the first 50 messages are loaded, and then all new messages are loaded.
-
+		var numLoaded = 0;
 		chatRef.orderByKey().limitToLast(50).on('child_added', function(data) {
 
 			$("#chat-messages").append("<div class='message' id='msg_" + data.key + "'data-key='" + data.key + "'>" + data.val() + "</div>");
-
-			if ($("#chat-messages")[0].scrollHeight - $("#chat-messages").scrollTop() == $("#chat-messages").innerHeight()) {
+			if (numLoaded <= 50) {
+				console.log("Only " + numLoaded + " loaded: Scrolled");
+				$('#chat-messages').stop().animate({
+					scrollTop: $('#chat-messages')[0].scrollHeight
+				}, 800);
+				numLoaded ++;
+			} else if ($("#chat-messages")[0].scrollHeight - $("#chat-messages").scrollTop() == $("#chat-messages").innerHeight()) {
 				//scroll to bottom
 				console.log("At bottom: Scrolled");
 				$('#chat-messages').stop().animate({
