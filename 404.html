@@ -517,7 +517,7 @@
 
 			
 			if (numLoaded < numToLoad) {
-				console.log("Only " + numLoaded + " loaded: Scrolled");
+				console.log("Only " + (numLoaded + 1) + " loaded: Scrolled");
 				$('#chat-messages').stop().animate({
 					scrollTop: $('#chat-messages')[0].scrollHeight
 				}, 800);
@@ -532,9 +532,9 @@
 			} else {
 				console.log("Not At bottom: Did not scroll");
 			}
-
+			$('#chat-messages').off('scroll');
 			$("#chat-messages").append("<div class='message' id='msg_" + data.key + "'data-key='" + data.key + "'>" + data.val() + "</div>");
-
+			$('#chat-messages').on('scroll', chatScrollHandler);
 			// as soon as a message is loaded, we remove the no messages text.
 			if (!$("#no-msg").hasClass("hidden")) {
 				$("#no-msg").addClass("hidden");
