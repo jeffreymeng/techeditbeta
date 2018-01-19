@@ -397,8 +397,11 @@
 					</div>
 					<div class="card-body" id="chat-messages">
 						<div id="latest-msg-box" class="text-center">
-							<a href="javascript:latestMsgHandler();" class="badge badge-primary shadow" id="latest-msg">Latest Message</a>
+							<<!--a href="javascript:latestMsgHandler();" class="badge badge-primary shadow" id="latest-msg">Latest Message</a>-->
+							<button type="button" class="btn btn-primary btn-sm" id="latest-msg">Latest Message</button>
+
 						</div>
+						
 
 						<p id="no-msg" class="text-muted">No Messages Yet. Be the first!</p>
 						<div class="spinner" id="chat-spinner">
@@ -688,7 +691,7 @@
 		$("#chat-messages").on("scroll", chatScrollHandler);
 
 		function chatScrollHandler() {
-			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight*0.9/**0.9 not required, hoping this creates a limit, scroll at least 0.9*/) {
 				//scrolled to bottom
 				$("#latest-msg").addClass("hidden");
 			}
@@ -701,6 +704,18 @@
 			$("#chat-messages").stop().animate({
 				scrollTop: $("#chat-messages")[0].scrollHeight
 			}, 800);
+		}
+		function checkScrollPercentage() {
+			  var currentDocument  = this;
+  var docsWindow       = $(currentDocument.defaultView); // This is the window holding the document
+  var docsWindowHeight = docsWindow.height(); // The viewport of the wrapper window
+  var scrollTop        = $(currentDocument).scrollTop(); // How much we scrolled already, in the viewport
+  var docHeight        = $(currentDocument).height();    // This is the full document height.
+
+  var howMuchMoreWeCanScrollDown = docHeight - (docsWindowHeight + scrollTop);
+  var percentViewed = 100.0 * (1 - howMuchMoreWeCanScrollDown / docHeight);
+  console.log("More to scroll: "+howMuchMoreWeCanScrollDown+"pixels. Percent Viewed: "+percentViewed+"%");
+
 		}
 	</script>
 
