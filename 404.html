@@ -83,26 +83,101 @@
 
 		/* Card */
 
-		#file-wrapper,
-		#chat-wrapper {
-			margin-top: 20px;
-			height: 560px;
-			height:80%;/*!*/
+		@media screen and (max-height:799px) {
+			#file-wrapper,
+			#chat-wrapper {
+				margin-top: 20px;
+				height: 560px;
+			}
+
+			/* Editor */
+			.firepad {
+				/* Width of bootstrap card + padding + border */
+				margin-top: 49px;
+				margin-bottom: 51px;
+				/* file-wrapper height - margin top - margin bottom*/
+				height: 460px;
+
+
+			}
 		}
 
-		/* Editor */
+		@media screen and (min-height:800px) and (max-height:999px) {
+			#file-wrapper,
+			#chat-wrapper {
+				margin-top: 20px;
+				height: 760px;
+			}
 
-		.firepad {
-			/* Width of bootstrap card + padding + border */
-			margin-top: 49px;
-			margin-bottom: 51px;
-			/* file-wrapper height - margin top - margin bottom*/
-			height: 460px;
-		
-			
+			/* Editor */
+			.firepad {
+				/* Width of bootstrap card + padding + border */
+				margin-top: 49px;
+				margin-bottom: 51px;
+				/* file-wrapper height - margin top - margin bottom*/
+				height: 660px;
+
+
+			}
 		}
-		
-		
+
+		@media screen and (min-height:1000px) and (max-height:1199px) {
+			#file-wrapper,
+			#chat-wrapper {
+				margin-top: 20px;
+				height: 960px;
+			}
+
+			/* Editor */
+			.firepad {
+				/* Width of bootstrap card + padding + border */
+				margin-top: 49px;
+				margin-bottom: 51px;
+				/* file-wrapper height - margin top - margin bottom*/
+				height: 860px;
+
+
+			}
+		}
+
+		@media screen and (min-height:1200px) and (max-height:1399px) {
+			#file-wrapper,
+			#chat-wrapper {
+				margin-top: 20px;
+				height: 1160px;
+			}
+
+			/* Editor */
+			.firepad {
+				/* Width of bootstrap card + padding + border */
+				margin-top: 49px;
+				margin-bottom: 51px;
+				/* file-wrapper height - margin top - margin bottom*/
+				height: 1060px;
+
+
+			}
+		}
+
+		@media screen and (min-height:1400px) {
+			#file-wrapper,
+			#chat-wrapper {
+				margin-top: 20px;
+				height: 1360px;
+			}
+
+			/* Editor */
+			.firepad {
+				/* Width of bootstrap card + padding + border */
+				margin-top: 49px;
+				margin-bottom: 51px;
+				/* file-wrapper height - margin top - margin bottom*/
+				height: 1260px;
+
+
+			}
+		}
+
 		.firepad,
 		#editor {
 
@@ -111,7 +186,6 @@
 			bottom: 0;
 			right: 0;
 			left: 0;
-			height:100%;/*!*/
 		}
 
 		.powered-by-firepad {
