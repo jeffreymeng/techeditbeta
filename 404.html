@@ -395,7 +395,7 @@
 						Chat
 					</div>
 					<div class="card-body" id="chat-messages">
-						<button type="button" class="btn btn-primary btn-block btn-sm" id="latest-msg">Latest Message</button>
+						<button type="button" class="btn btn-outline-primary btn-block btn-sm" id="latest-msg">Latest Message</button>
 
 
 						<p id="no-msg" class="text-muted">No Messages Yet. Be the first!</p>
@@ -686,7 +686,7 @@
 		$("#chat-messages").on("scroll", chatScrollHandler);
 
 		function chatScrollHandler() {
-			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight * 0.95 /**0.9 not required, hoping this creates a limit, scroll at least 0.9*/ ) {
+			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight * 0.95 /**0.95 is so user*/ ) {
 				//scrolled to bottom
 				$("#latest-msg").addClass("hidden");
 			}
