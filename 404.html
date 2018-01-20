@@ -605,7 +605,7 @@
 				$("#chat-messages").on("scroll", chatScrollHandler);
 				numLoaded++;
 			}
-			else if ($("#chat-messages")[0].clientHeight - $("#chat-messages").scrollTop() == $("#chat-messages").innerHeight()) {
+			else if ($("#chat-messages")[0].scrollHeight - $("#chat-messages").scrollTop() == $("#chat-messages").innerHeight()) {
 				//scroll to bottom
 				console.log("At bottom: Scrolled");
 				//$("#chat-messages").on("scroll", chatScrollHandler);
@@ -687,7 +687,7 @@
 		$("#chat-messages").on("scroll", chatScrollHandler);
 
 		function chatScrollHandler() {
-			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].clientHeight * 0.9 /**0.9 not required, hoping this creates a limit, scroll at least 0.9*/ ) {
+			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight * 0.95 /**0.9 not required, hoping this creates a limit, scroll at least 0.9*/ ) {
 				//scrolled to bottom
 				$("#latest-msg").addClass("hidden");
 			}
