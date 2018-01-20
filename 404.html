@@ -209,9 +209,8 @@
 
 		/* Aesthetics */
 
-		#latest-msg-box {
-			width: 100%;
-			position: sticky;
+		#latest-msg {
+ 			position: sticky;
 			top: 10px;
 		}
 
@@ -396,11 +395,8 @@
 						Chat
 					</div>
 					<div class="card-body" id="chat-messages">
-						<div id="latest-msg-box" class="text-center">
 							<!--a href="javascript:latestMsgHandler();" class="badge badge-primary shadow" id="latest-msg">Latest Message</a>-->
-								<button type="button" class="btn btn-primary btn-block btn-sm" id="latest-msg">Latest Message</button>
-
-						</div>
+							<button type="button" class="btn btn-primary btn-block btn-sm" id="latest-msg">Latest Message</button>
 
 
 						<p id="no-msg" class="text-muted">No Messages Yet. Be the first!</p>
@@ -699,7 +695,7 @@
 				$("#latest-msg").removeClass("hidden");
 			}
 		}
-		$("#latest-msg, #latest-msg-box").click(latestMsgHandler);
+		$("#latest-msg").click(latestMsgHandler);
 
 		function latestMsgHandler() {
 
