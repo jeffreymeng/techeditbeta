@@ -397,8 +397,8 @@
 					</div>
 					<div class="card-body" id="chat-messages">
 						<div id="latest-msg-box" class="text-center">
-							<<!--a href="javascript:latestMsgHandler();" class="badge badge-primary shadow" id="latest-msg">Latest Message</a>-->
-								<button type="button" class="btn btn-primary btn-sm" id="latest-msg">Latest Message</button>
+							<!--a href="javascript:latestMsgHandler();" class="badge badge-primary shadow" id="latest-msg">Latest Message</a>-->
+								<button type="button" class="btn btn-primary btn-block btn-sm" id="latest-msg">Latest Message</button>
 
 						</div>
 
@@ -699,7 +699,7 @@
 				$("#latest-msg").removeClass("hidden");
 			}
 		}
-		/*$("#latest-msg, #latest-msg-box").click(latestMsgHandler);*/
+		$("#latest-msg, #latest-msg-box").click(latestMsgHandler);
 
 		function latestMsgHandler() {
 
