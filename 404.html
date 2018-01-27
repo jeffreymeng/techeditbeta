@@ -709,7 +709,21 @@
 			}, 800);
 		}
 
-
+		setTimeout(function(){
+			$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 800);
+		}, 500)
+		setTimeout(function(){
+			$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 800);
+		}, 250)
+		setTimeout(function(){
+			$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 800);
+		}, 750)
 		latestMsgHandler();
 	</script>
 
