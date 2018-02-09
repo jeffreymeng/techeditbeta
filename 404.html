@@ -706,10 +706,11 @@
 		$("#latest-msg").click(latestMsgHandler);
 
 		function latestMsgHandler() {
-
+	
 			$("#chat-messages").stop().animate({
 				scrollTop: $("#chat-messages")[0].scrollHeight
 			}, 800);
+			$("#chat-msg-box").focus();
 		}
 
 		setTimeout(function(){
