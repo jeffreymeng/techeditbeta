@@ -707,7 +707,24 @@
 			}, 800);
 		}
 
-	
+		setTimeout(function(){
+			console.log(500);
+			$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 800);
+		}, 500);
+		setTimeout(function(){
+			console.log(250);
+			$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 800);
+		}, 250);
+		setTimeout(function(){
+			console.log(750);
+			$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 800);
+		}, 750);
 		latestMsgHandler();
 	</script>
 
