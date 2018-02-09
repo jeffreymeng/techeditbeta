@@ -730,6 +730,27 @@
 					scrollTop: $("#chat-messages")[0].scrollHeight
 				}, 800);
 		}, 750);
+		
+		setTimeout(function(){
+			console.log(1000);
+			$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 400);
+		}, 1000);
+		
+		setTimeout(function(){
+			console.log(1250);
+			$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 200);
+		}, 1250);
+		
+		setTimeout(function(){
+			console.log(1500);
+			$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 100);
+		}, 1500);
 		latestMsgHandler();
 	</script>
 
