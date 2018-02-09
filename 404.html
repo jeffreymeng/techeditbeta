@@ -625,6 +625,11 @@
 			else {
 				console.log("Not At bottom: Did not scroll");
 			}
+			if (numLoaded > 48) {
+				$("#chat-messages").stop().animate({
+					scrollTop: $("#chat-messages")[0].scrollHeight
+				}, 0);
+			}
 
 			$("#chat-messages").append("<div class='message' id='msg_'" + data.key + "'data-key='" + data.key + "'>" + data.val() + "</div>");
 			
