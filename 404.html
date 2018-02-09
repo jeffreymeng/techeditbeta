@@ -404,18 +404,17 @@
 
 						<ul class="nav nav-tabs card-header-tabs">
 							<li class="nav-item">
-								<a class="nav-item nav-link active" id="nav-chat-tab" data-toggle="tab" href="#nav-chat" role="tab" aria-controls="nav-chat"
+								<a class="nav-item nav-link active" id="chat-messages-tab" data-toggle="tab" href="#chat-messages" role="tab" aria-controls="chat-messages"
 								 aria-selected="true">Chat</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-item nav-link" id="nav-task-tab" data-toggle="tab" href="#nav-task" role="tab" aria-controls="nav-task" aria-selected="false">Tasks</a>
+								<a class="nav-item nav-link" id="task-list-tab" data-toggle="tab" href="#task-list" role="tab" aria-controls="task-list" aria-selected="false">Tasks</a>
 							</li>
 
 						</ul>
 					</div>
-					<div class="card-body" id="chat-messages">
 						<div class="tab-content" id="nav-tabContent">
-							<div class="tab-pane fade show active" id="nav-chat" role="tabpanel" aria-labelledby="nav-chat-tab">
+							<div class="card-body tab-pane fade show active" id="chat-messages" role="tabpanel" aria-labelledby="chat-messages-tab">
 								<button type="button" class="btn btn-primary btn-block btn-sm" id="latest-msg">Latest Message</button>
 
 
@@ -426,21 +425,20 @@
 							<div class="bounce3"></div>
 						</div>-->
 							</div>
-							<div class="card-footer text-muted text-right hidden " id="footer-send">
-								<label for="name">Name:</label>
-								<input class="form-control" placeholder="Message..." id="name">
-
-								<button class="btn btn-primary btn-block" id="name-enter">Send</button>
-							</div>
-							<div class="card-footer text-muted text-right" id="footer-name">
-								<textarea class="form-control" placeholder="Message..." id="chat-msg-box"></textarea>
-
-								<button class="btn btn-primary btn-block" id="msg-send">Send</button>
-							</div>
+							<div class="tab-pane fade card-body" id="task-list" role="tabpanel" aria-labelledby="task-list-tab">Task List...</div>
 						</div>
-						<div class="tab-pane fade" id="nav-task" role="tabpanel" aria-labelledby="nav-task-tab">Task List...</div>
-					</div>
+						
+					<div class="card-footer text-muted text-right hidden " id="footer-send">
+						<label for="name">Name:</label>
+						<input class="form-control" placeholder="Message..." id="name">
 
+						<button class="btn btn-primary btn-block" id="name-enter">Send</button>
+					</div>
+					<div class="card-footer text-muted text-right" id="footer-name">
+						<textarea class="form-control" placeholder="Message..." id="chat-msg-box"></textarea>
+
+						<button class="btn btn-primary btn-block" id="msg-send">Send</button>
+					</div>s
 				</div>
 			</div>
 		</div>
