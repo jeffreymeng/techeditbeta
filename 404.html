@@ -566,7 +566,7 @@
 			storageBucket: "techedit-63e7f.appspot.com",
 			messagingSenderId: "609280907475"
 		};
-		firebase.initializeApp(config);
+
 
 		//key of latest message
 		//var lastMsg;
@@ -592,7 +592,11 @@
 			//console.log(pos);
 			$("#footer-position").html((pos.row + 1) + ":" + (pos.column + 1));
 		});
-
+		firebase.initializeApp(config);
+		//bootstrap tabs
+		$('.nav-tabs a').click(function() {
+			$(this).tab('show');
+		});
 		//show the settings modal when the user clicks on the cog icon
 		$("#footer-cog").click(function() {
 			$("#options").modal("show");
