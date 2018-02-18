@@ -230,7 +230,7 @@
 
 		}
 
-		#chat-messages {
+		#chat-messages, .card-body {
 			overflow-y: auto;
 
 			overflow-wrap: normal;
@@ -253,7 +253,7 @@
 			position: sticky;
 		}
 
-		.message>p {
+		.message > p {
 			margin-top: 10px;
 			overflow-x: visible;
 			word-wrap: break-word;
@@ -262,7 +262,6 @@
 		.message {
 			margin-top: 30px;
 		}
-
 		/* loader */
 
 		.spinner {
@@ -415,17 +414,18 @@
 						</ul>
 					</div>
 					<div class="card-body">
-						<div class="tab-content " id="tab-content">
+						<div class="tab-content" id="tab-content">
 							<div class="tab-pane fade show active" id="chat-messages" role="tabpanel" aria-labelledby="chat-messages-tab">
 								<button type="button" class="btn btn-primary btn-block btn-sm" id="latest-msg">Latest Message</button>
 
 
 								<p id="no-msg" class="text-muted">No Messages Yet. Be the first!</p>
 								<!--<div class="spinner" id="chat-spinner">
-							<div class="bounce1"></div>
-							<div class="bounce2"></div>
-							<div class="bounce3"></div>
-						</div>-->
+									<div class="bounce1"></div>
+									<div class="bounce2"></div>
+									<div class="bounce3"></div>
+								</div>-->
+
 							</div>
 							<div class="tab-pane fade" id="task-list" role="tabpanel" aria-labelledby="task-list-tab">Task List...</div>
 						</div>
@@ -669,7 +669,9 @@
 				}, 0);
 			}
 
-			$("#chat-messages").append("<div class='message' id='msg_'" + data.key + "'data-key='" + data.key + "'>" + data.val() + "</div>");
+			$("#chat-messages").append(`
+			<div class='message' id="${'msg_' + data.key}" data-key="${data.key}">${data.val()}</div>
+			`);
 
 			// as soon as a message is loaded, we remove the no messages text.
 			if (!$("#no-msg").hasClass("hidden")) {
