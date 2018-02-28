@@ -230,7 +230,7 @@
 
 		}
 
-		#chat-messages, .card-body {
+		#chat-messages, #tab-chat, .card-body {
 			overflow-y: auto;
 
 			overflow-wrap: normal;
@@ -403,7 +403,7 @@
 
 						<ul class="nav nav-tabs card-header-tabs">
 							<li class="nav-item">
-								<a class="nav-item nav-link active" id="chat-messages-tab" data-toggle="tab" href="#chat-messages" role="tab" aria-controls="chat-messages"
+								<a class="nav-item nav-link active" id="chat-messages-tab" data-toggle="tab" href="#tab-chat" role="tab" aria-controls="chat-messages"
 								 aria-selected="true">Chat</a>
 							</li>
 							<li class="nav-item">
@@ -617,15 +617,15 @@
 
 		//show the editor only when firepad and ace are ready
 		firepad.on("ready", function () {
-			$("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+			$("#tab-chat").scrollTop($("#tab-chat")[0].scrollHeight);
 
 			$("#block-load").addClass("hidden");
 			$("#block-code").removeClass("hidden");
 
-			$("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+			$("#tab-chat").scrollTop($("#tab-chat")[0].scrollHeight);
 
 			setTimeout(function () {
-				$("#chat-messages").scrollTop($("#chat-messages")[0].scrollHeight);
+				$("#tab-chat").scrollTop($("#tab-chat")[0].scrollHeight);
 			}, 100);
 		});
 
@@ -637,39 +637,39 @@
 		chatRef.orderByKey().limitToLast(numToLoad).on("child_added", function (data) {
 			if (numLoaded < numToLoad && numLoaded > 20) {
 				console.log("Only " + (numLoaded + 1) + " loaded: Scrolled");
-				//$("#chat-messages").on("scroll", chatScrollHandler);
+				//$("#tab-chat").on("scroll", chatScrollHandler);
 
 				//scroll
-				$("#chat-messages").stop().animate({
-					scrollTop: $("#chat-messages")[0].scrollHeight
+				$("#tab-chat").stop().animate({
+					scrollTop: $("#tab-chat")[0].scrollHeight
 				}, 800);
 
 				numLoaded++;
 			}
-			else if ($("#chat-messages")[0].scrollHeight - $("#chat-messages").scrollTop() == $("#chat-messages").innerHeight()) {
+			else if ($("#tab-chat")[0].scrollHeight - $("#tab-chat").scrollTop() == $("#tab-chat").innerHeight()) {
 				//scroll to bottom
 				console.log("At bottom: Scrolled");
-				//$("#chat-messages").on("scroll", chatScrollHandler);
+				//$("#tab-chat").on("scroll", chatScrollHandler);
 				// "pause the scroll handler"
-				$("#chat-messages").off("scroll");
+				$("#tab-chat").off("scroll");
 				//scrolls
-				$("#chat-messages").stop().animate({
-					scrollTop: $("#chat-messages")[0].scrollHeight
+				$("#tab-chat").stop().animate({
+					scrollTop: $("#tab-chat")[0].scrollHeight
 				}, 800);
 				//"unpause" the scroll back to latest btn
-				$("#chat-messages").on("scroll", chatScrollHandler);
+				$("#tab-chat").on("scroll", chatScrollHandler);
 
 			}
 			else {
 				console.log("Not At bottom: Did not scroll");
 			}
 			if (numLoaded > 48) {
-				$("#chat-messages").stop().animate({
-					scrollTop: $("#chat-messages")[0].scrollHeight
+				$("#tab-chat").stop().animate({
+					scrollTop: $("#tab-chat")[0].scrollHeight
 				}, 0);
 			}
 
-			$("#chat-messages").append(`
+			$("#tab-chat").append(`
 			<div class='message' id="${'msg_' + data.key}" data-key="${data.key}">${data.val()}</div>
 			`);
 
@@ -731,8 +731,8 @@
 		});
 
 		//if the user is already scrolled to the bottom of the message div, we autoscroll on new messages.
-		//$("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
-		$("#chat-messages").on("scroll", chatScrollHandler);
+		//$("#tab-chat").scrollTop($("#tab-chat").prop("scrollHeight"));
+		$("#tab-chat").on("scroll", chatScrollHandler);
 
 		function chatScrollHandler() {
 			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight * 0.95 /**0.95 is so user dosent see it when a small scroll occurs*/) {
@@ -747,49 +747,49 @@
 
 		function latestMsgHandler() {
 
-			$("#chat-messages").stop().animate({
-				scrollTop: $("#chat-messages")[0].scrollHeight
+			$("#tab-chat").stop().animate({
+				scrollTop: $("#tab-chat")[0].scrollHeight
 			}, 800);
 			$("#chat-msg-box").focus();
 		}
 
 		setTimeout(function () {
 			console.log(500);
-			$("#chat-messages").stop().animate({
-				scrollTop: $("#chat-messages")[0].scrollHeight
+			$("#tab-chat").stop().animate({
+				scrollTop: $("#tab-chat")[0].scrollHeight
 			}, 800);
 		}, 500);
 		setTimeout(function () {
 			console.log(250);
-			$("#chat-messages").stop().animate({
-				scrollTop: $("#chat-messages")[0].scrollHeight
+			$("#tab-chat").stop().animate({
+				scrollTop: $("#tab-chat")[0].scrollHeight
 			}, 800);
 		}, 250);
 		setTimeout(function () {
 			console.log(750);
-			$("#chat-messages").stop().animate({
-				scrollTop: $("#chat-messages")[0].scrollHeight
+			$("#tab-chat").stop().animate({
+				scrollTop: $("#tab-chat")[0].scrollHeight
 			}, 800);
 		}, 750);
 
 		setTimeout(function () {
 			console.log(1000);
-			$("#chat-messages").stop().animate({
-				scrollTop: $("#chat-messages")[0].scrollHeight
+			$("#tab-chat").stop().animate({
+				scrollTop: $("#tab-chat")[0].scrollHeight
 			}, 400);
 		}, 1000);
 
 		setTimeout(function () {
 			console.log(1250);
-			$("#chat-messages").stop().animate({
-				scrollTop: $("#chat-messages")[0].scrollHeight
+			$("#tab-chat").stop().animate({
+				scrollTop: $("#tab-chat")[0].scrollHeight
 			}, 200);
 		}, 1250);
 
 		setTimeout(function () {
 			console.log(1500);
-			$("#chat-messages").stop().animate({
-				scrollTop: $("#chat-messages")[0].scrollHeight
+			$("#tab-chat").stop().animate({
+				scrollTop: $("#tab-chat")[0].scrollHeight
 			}, 100);
 		}, 1500);
 		latestMsgHandler();
