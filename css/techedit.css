@@ -1,0 +1,72 @@
+
+.container {
+	height:75%
+}
+#nav-file-id-go {
+	display:none;
+}
+
+header.masthead {
+	background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+#nav-file-id {
+	width:300px;
+}
+#nav-file-id::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	color: white;
+	opacity: 1; /* Firefox */
+}
+
+#nav-file-id:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	color: white;
+}
+
+#nav-file-id::-ms-input-placeholder { /* Microsoft Edge */
+	color: white;
+}
+#nav-file-id {
+	width:300px;
+
+	background-color:#6c757d;
+	opacity:0.7;
+}
+
+#nav-file-id:not(:placeholder-shown),
+#nav-file-id:focus{
+	width:240px;
+	background-color:#f1f2f3;
+	opacity:1;
+}
+
+#nav-file-id {
+	width:300px;
+}
+#nav-file-id:not(:placeholder-shown)::placeholder,
+#nav-file-id:focus::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	color: black;
+	opacity: 1; /* Firefox */
+}
+
+#nav-file-id:not(:placeholder-shown):-ms-input-placeholder,
+#nav-file-id:focus:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	color: black;
+}
+
+#nav-file-id:not(:placeholder-shown)::-ms-input-placeholder,
+#nav-file-id:focus::-ms-input-placeholder { /* Microsoft Edge */
+	color: black;
+}
+
+#nav-file-id:not(:placeholder-shown) ~ #nav-file-id-go,
+#nav-file-id:focus ~ #nav-file-id-go {
+	display:inline;
+	margin-left:5px;
+	width:55px;
+
+
+}
+
+.hidden {
+	display:none !important;
+}
