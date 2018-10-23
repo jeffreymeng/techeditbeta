@@ -15,7 +15,12 @@ String.prototype.replaceAll = function(search, replacement) {
 	return target.replace(new RegExp(search, 'g'), replacement);
 };
 
+$("#nav-file-id").keypress(function(e) {
+	if(e.which === 13) {
+		$("#nav-file-id-btn").click();
+	}
 
+});
 $("#nav-file-id-btn").click(function() {
 	var id = $("#nav-file-id").val().replaceAll(" ");
 	if (id != "") {
