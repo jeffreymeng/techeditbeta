@@ -68,8 +68,14 @@
 		</ul>
 	</div>
 </nav>
-
-<div id="split-wrapper">
+<div id="loader" class="text-center">
+	<div class="spinner">
+		<div class="bounce1"></div>
+		<div class="bounce2"></div>
+		<div class="bounce3"></div>
+	</div>
+</div>
+<div id="split-wrapper" class="hidden">
 	<div id="editor-box" class="split">
 		<div id="editor">
 &lt;html>
@@ -211,6 +217,10 @@
 		return (usePound?"#":"") + RR + GG + BB;
 
 	}
+	function stopLoading() {
+		$("#loader").addClass("hidden");
+		$("#split-wrapper").removeClass("hidden");
+	}
 </script>
 <script>
 	var editor = ace.edit("editor");
@@ -234,6 +244,7 @@
 		});
 	editor.renderer.on("themeLoaded", function() {
 		updateSidebarTheme(editor);
+		stopLoading();
 	});
 	$("#lang-select").change(function() {
 		editor.getSession().setMode("ace/mode/" + $("#lang-select").val());
