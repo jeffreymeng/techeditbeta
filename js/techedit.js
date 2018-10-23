@@ -17,6 +17,7 @@ String.prototype.replaceAll = function(search, replacement) {
 
 $("#nav-file-id").keypress(function(e) {
 	if(e.which === 13) {
+		console.log(3);
 		$("#nav-file-id-btn").click();
 	}
 
