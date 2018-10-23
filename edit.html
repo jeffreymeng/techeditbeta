@@ -37,67 +37,9 @@
 	<link href="/css/simple-line-icons.css" rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css"><!-- Custom styles for this template -->
 
-
+	<link href="/css/bootstrap-select.css" rel="stylesheet">
 	<link href="/css/techedit.css" rel="stylesheet">
-	<style type="text/css">
-		#editor-box {
-
-
-			display:inline-block;
-			position:relative;
-		}
-		#editor {
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			overflow:auto;
-
-		}
-		#editor-card, #editor-card-wrapper, #chat-card, #chat-card-wrapper {
-			height: 100%;
-
-		}
-		.split {
-			-webkit-box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			box-sizing: border-box;
-			overflow-y: auto;
-			overflow-x: hidden;
-
-		}
-
-		.split, .gutter.gutter-horizontal {
-			float: left;
-			height:400px;
-		 }
-		#split-wrapper {
-
-			display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-			display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-			display: -ms-flexbox;      /* TWEENER - IE 10 */
-			display: -webkit-flex;     /* NEW - Chrome */
-			display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
-
-		}
-		.gutter.gutter-horizontal {
-			cursor: ew-resize;
-		}
-		.gutter {
-			background-color: #eee;
-			background-repeat: no-repeat;
-			background-position: 50%;
-		}
-
-		.gutter.gutter-vertical {
-			background-image:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=')
-		}
-
-		.gutter.gutter-horizontal {
-			background-image:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')
-		}
-
-
-	</style>
+	<link href="/css/editor.css" rel="stylesheet">
 </head>
 <body>
 
@@ -113,15 +55,13 @@
 
 		<form class="form-inline mr-auto my-2 my-lg-0">
 			<input class="form-control" type="text" placeholder="Existing File ID" id="nav-file-id" tabindex="2">
-			<a class="btn btn-secondary" href="#" id="nav-file-id-go">Go!</a>
+			<a class="btn btn-secondary" href="#" id="nav-file-id-btn">Go!</a>
 		</form>
 		<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
 			<li class="nav-item">
 				<a class="nav-link" href="#">New File</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Link</a>
-			</li>
+
 			<li class="nav-item">
 				<a class="nav-link" href="#">Sign in</a>
 			</li>
@@ -132,9 +72,29 @@
 <div id="split-wrapper">
 	<div id="editor-box" class="split">
 		<div id="editor">
-			function foo(items) {
-			var x = "All this is syntax highlighted";
-			return x;
+&lt;html>
+	&lt;head>
+		&lt;style>
+			.class {
+			color:white;
+			}
+			#identifier, tag {
+			background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+			}
+		&lt;/style>
+	&lt;/head>
+	&lt;body>
+		&lt;p> Hello, World! &lt;/p>
+		&lt;script>
+			alert("hi");
+			deathAwaits = false;
+			//deathAwaits = true;
+			if (deathAwaits) {
+				surrender();
+			}
+		&lt;/script>
+	&lt;/body>
+&lt;/html>
 		</div>
 	</div>
 
@@ -142,7 +102,30 @@
 		<div class="p-3">
 			<h1>index.html</h1>
 			<h3>Settings</h3>
-			<p>Language:</p>
+			<div id="settings-form">
+				<div class="form-group form-inline">
+					<label for="lang-select">Language:</label>
+					<select class="selectpicker form-control" id="lang-select">
+						<option value="html">HTML</option>
+						<option value="css">CSS</option>
+						<option value="javascript">Javascript</option>
+					</select>
+				</div>
+				<div class="form-group form-inline">
+					<label for="lang-select">Theme:</label>
+					<select class="selectpicker form-control" id="theme-select">
+						<optgroup label="Light">
+							<option value="xcode">Xcode</option>
+							<option value="dawn">Dawn</option>
+							<option value="solarized_light">Solarized Light</option>
+						</optgroup>
+						<optgroup label="Dark">
+							<option value="monokai" selected>Monokai</option>
+							<option value="solarized_dark">Solarized Dark</option>
+						</optgroup>
+					</select>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -154,23 +137,111 @@
 </script>
 <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/split.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/bootstrap-select.js" type="text/javascript" charset="utf-8"></script>
 
+<script src="/js/techedit.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	function getBrightness(r, g, b) {
+		return (r * 299 + g * 587 + b * 114) / 1000;
+	}
+	function updateSidebarTheme(editor, light) {
+
+		var themeColor = getComputedStyle(editor.renderer.scroller).backgroundColor;
+
+		//convert to int array [r, g, b]
+		themeColor = themeColor.replace(/[^\d,]/g, '').split(',');
+
+		var textColor;
+		var r = themeColor[0];
+		var g = themeColor[1];
+		var b = themeColor[2];
+
+		if ((!light && light != null) || getBrightness(r, g, b) < 123) {
+
+			textColor = "#ced4da";
+			gutterColor = "#6c757d";
+			$('.selectpicker').selectpicker("setStyle", "btn-light", "remove");
+			$('.selectpicker').selectpicker("setStyle", "btn-secondary", "add");
+		} else {
+			textColor = "#000000";
+			gutterColor = "#EEEEEE";
+			$('.selectpicker').selectpicker("setStyle", "btn-secondary", "remove");
+			$('.selectpicker').selectpicker("setStyle", "btn-light", "add");
+		}
+		var backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
+
+		$("#sidebar").css("background-color", backgroundColor);
+		$("#sidebar").css("color", textColor);
+		$(".gutter").css("background-color", gutterColor);
+
+
+	}
+	function adjustBrightness(color, amt) {
+
+		var usePound = false;
+
+		if (color[0] == "#") {
+			color = color.slice(1);
+			usePound = true;
+		}
+
+		var R = parseInt(color.substring(0,2),16);
+		var G = parseInt(color.substring(2,4),16);
+		var B = parseInt(color.substring(4,6),16);
+
+		// to make the colour less bright than the input
+		// change the following three "+" symbols to "-"
+		R = R + amt;
+		G = G + amt;
+		B = B + amt;
+
+		if (R > 255) R = 255;
+		else if (R < 0) R = 0;
+
+		if (G > 255) G = 255;
+		else if (G < 0) G = 0;
+
+		if (B > 255) B = 255;
+		else if (B < 0) B = 0;
+
+		var RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+		var GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+		var BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+
+		return (usePound?"#":"") + RR + GG + BB;
+
+	}
+</script>
 <script>
 	var editor = ace.edit("editor");
-	editor.setTheme("ace/theme/xcode");
-	editor.getSession().setMode("ace/mode/javascript");
+	editor.setTheme("ace/theme/monokai");
+	editor.getSession().setMode("ace/mode/html");
 	editor.setShowPrintMargin(false);
-	editor.getSession().setUseWorker(false);
-	function onDragEnd() {
-		editor.resize();
+	//editor.getSession().setUseWorker(false);
+
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+		$('.selectpicker').selectpicker('mobile');
 	}
+
+
 	var split = Split(["#editor-box", "#sidebar"],
 		{
-			onDragEnd:onDragEnd,
+			onDragEnd:function() {
+				editor.resize();
+			},
 			minSize:0,
 			sizes: [75, 25],
 		});
-
+	editor.renderer.on("themeLoaded", function() {
+		updateSidebarTheme(editor);
+	});
+	$("#lang-select").change(function() {
+		editor.getSession().setMode("ace/mode/" + $("#lang-select").val());
+	});
+	$("#theme-select").change(function() {
+		editor.setTheme("ace/theme/" + $("#theme-select").val());
+		updateSidebarTheme(editor);
+	});
 </script>
 </body>
 </html>

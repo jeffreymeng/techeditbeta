@@ -1,8 +1,10 @@
-
+label {
+	font-weight:bold;
+}
 .container {
 	height:75%
 }
-#nav-file-id-go {
+#nav-file-id-btn {
 	display:none;
 }
 
@@ -58,8 +60,8 @@ header.masthead {
 	color: black;
 }
 
-#nav-file-id:not(:placeholder-shown) ~ #nav-file-id-go,
-#nav-file-id:focus ~ #nav-file-id-go {
+#nav-file-id:not(:placeholder-shown) ~ #nav-file-id-btn,
+#nav-file-id:focus ~ #nav-file-id-btn {
 	display:inline;
 	margin-left:5px;
 	width:55px;
