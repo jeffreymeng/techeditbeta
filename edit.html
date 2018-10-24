@@ -43,19 +43,48 @@
 	<link href="/css/editor.css" rel="stylesheet">
 	<style>
 		.userlist-color-indicator {
-		  display: inline-block;
-		  width: 32px;
-		  height: 32px;
-		  border: 1px solid #ccc;
-		  -webkit-border-radius: 4px;
-		  -moz-border-radius: 4px;
-		  border-radius: 4px;
+			display: inline-block;
+			width: 32px;
+			height: 32px;
+			border: 1px solid #ccc;
+			-webkit-border-radius: 4px;
+			-moz-border-radius: 4px;
+			border-radius: 4px;
+			padding-right:10px;
+		}
+		.userlist-username {
+			display:inline-block;
+			height: 33px;
+			line-height:33px;
+			vertical-align: middle;
+
+			padding-left:10px;
+
 		}
 		#userlist {
+
 			list-style:none;
 			padding:0;
 			margin:0;
-		
+
+		}
+		#userlist-currentuser-inputgroup, #userlist-currentuser-input {
+			height:32px;
+		}
+		#userlist-currentuser-input, #userlist-currentuser-input-confirm {
+			/* Box Shadow doesn't look good with the other css */
+			outline: none;
+
+			-webkit-box-shadow: none !important;
+			-moz-box-shadow: none !important;
+			box-shadow: none !important;
+		}
+		.userlist-wrapper {
+			margin: 0 auto;
+		}
+
+		.userlist-color-indicator, .userlist-username {
+			float: left;
 		}
 	</style>
 </head>
@@ -130,17 +159,37 @@
 			</div>
 			<div id="userlist-box">
 				<h3>Active</h3>
-				<div id="current-user-form" class="form">
-					<label for="lang-select">Enter your name:</label>
-	
-					<input class="form-control" value="User00784">
+
+				<div id="userlist-full">
+					<ul id="userlist">
+
+						<li class="userlist-li pb-5" id="userlist-current-user">
+							<div class="userlist-wrapper">
+								<div class="userlist-color-indicator" id="userlist-currentuser-color-indicator"></div>
+
+								<div class="userlist-username">
+									<div class="input-group mb-3" id="userlist-currentuser-inputgroup">
+
+										<input type="text" class="form-control" placeholder="Username" id="userlist-currentuser-input" placeholder="user">
+										<div class="input-group-append" id="userlist-currentuser-input-confirmbox">
+											<button class="btn btn-success" type="button" id="userlist-currentuser-input-confirm">&check;</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
 				</div>
-				<hr>
-			
-				<ul id="userlist">
-					<li><div class="userlist-color-indicator" style="background-color:#eee;"></div> <span>User00837</span></li>	
-					<li><div class="userlist-color-indicator" style="background-color:#369;"></div> <span>User00848</span></li>
-				</ul>
+				<div id="userlist-light-box" class="hidden">
+					<div id="userlist-light-current-user">
+						<label>You:</label>
+						<input type="text" class="form-control" placeholder="Username" id="userlist-light-currentuser-input" placeholder="user">
+						<button class="btn btn-block btn-success mt-2 mb-4">Update Username</button>
+					</div>
+					<ul id="userlist-light">
+
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -255,6 +304,47 @@
 		editor.getSession().setMode("ace/mode/" + $("#lang-select").val());
 		firebase.database().ref("/f/test/data/language/").set($("#lang-select").val());
 	}
+	function addUserToUserlist(username, color) {
+		console.log(username);
+		var html = `<li class="userlist-li userlist-addedbyjs"><div class="userlist-wrapper"><div class="userlist-color-indicator" style="background-color:${color};"></div> <div class="userlist-username">${username}</div></div></li>`;
+		var lighthtml = `<li class="userlist-light-li userlist-addedbyjs">${username}</li>`;
+
+		$("#userlist").append(html);
+		$("#userlist-light").append(lighthtml);
+		return html;
+	}
+	function resetUserlist() {
+		$(".userlist-addedbyjs").remove();
+	}
+	function onUserlistResize() {
+		console.log($("#userlist-box").width());
+
+		if ($("#userlist-box").width() < 275) {
+
+			$("#userlist-full").addClass("hidden");
+			$("#userlist-light-box").removeClass("hidden");
+		} else {
+			$("#userlist-full").removeClass("hidden");
+			$("#userlist-light-box").addClass("hidden");
+		}
+	}
+	function setConfirmBoxVisible(visible) {
+		if (visible) {
+			var html =
+				`<div class="input-group-append" id="userlist-currentuser-input-confirmbox">` +
+					`<button class="btn btn-success" type="button" id="userlist-currentuser-input-confirm">&check;</button>` +
+				`</div>`;
+
+			// if the confirm box doesn't already exist
+			if ($("#userlist-currentuser-input-confirmbox").length == 0) {
+				$("#userlist-currentuser-input").append(html);
+			}
+
+		} else {
+			//detach removes the element but keeps click handlers
+			$("#userlist-currentuser-input-confirmbox").detach();
+		}
+	}
 </script>
 <script>
 	var editor = ace.edit("editor");
@@ -273,15 +363,26 @@
 		{
 			onDragEnd:function() {
 				editor.resize();
+
 			},
+			onDrag:onUserlistResize,
 			minSize:0,
 			sizes: [75, 25],
 		});
 
+	//check for sidebar resize
+	$(window).resize(onUserlistResize);
+
+
 	editor.renderer.on("themeLoaded", function() {
 		updateSidebarTheme(editor);
-
 	});
+	var userId;
+	if (localStorage.getItem("techedit-userId") == null) {
+		userId = "user " + Math.floor(Math.random() * 9999999999).toString();
+	} else {
+		userId = localStorage.getItem("techedit-userId");
+	}
 
 	// Get Firebase Database reference.
 	var firepadRef = firebase.database().ref("/f/test/");
@@ -290,12 +391,36 @@
 		$("#lang-select").selectpicker("val", data.language);
 		$("#lang-select").on("change", onLanguageChange);
 		var firepad = Firepad.fromACE(firepadRef, editor, {
+			userId:userId
 		});
-		
-    	
+		firepad.setUserId(userId);
+
 		firepad.on("ready", function() {
 			stopLoading();
+			onUserlistResize();
+
 		});
+
+	});
+
+	firebase.database().ref("/f/test/users/").on("value", function(snapshot) {
+		resetUserlist();
+		var users = snapshot.val();
+		//https://stackoverflow.com/a/684692/5511561 (slightly adapted)
+		for (var key in users) {
+			if (users.hasOwnProperty(key)) {
+				if (key != userId) {
+					console.log(key);
+					addUserToUserlist(users[key].username || key, users[key].color);
+
+				} else {
+					$("#userlist-currentuser-input").val(key);
+					$("#userlist-light-currentuser-input").val(key);
+					$("#userlist-currentuser-color-indicator").css("background-color", users[key].color);
+				}
+			}
+		}
+
 
 	});
 	firebase.database().ref("/f/test/data/language/").on("value", function(snapshot) {

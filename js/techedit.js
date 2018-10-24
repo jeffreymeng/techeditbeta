@@ -11,6 +11,7 @@ function getQuery(name) {
 
 //http://stackoverflow.com/a/17606289/5511561s
 String.prototype.replaceAll = function(search, replacement) {
+	replacement = replacement || "";
 	var target = this;
 	return target.replace(new RegExp(search, 'g'), replacement);
 };
@@ -23,7 +24,7 @@ $("#nav-file-id").keypress(function(e) {
 
 });
 $("#nav-file-id-btn").click(function() {
-	var id = $("#nav-file-id").val().replaceAll(" ");
+	var id = $("#nav-file-id").val().replaceAll(" ", "");
 	if (id != "") {
 		window.location.href = "/f/" + id;
 	}
