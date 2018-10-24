@@ -61,8 +61,12 @@
 			padding-left:10px;
 
 		}
+		.userlist-li {
+			display:inline-block;
+			margin-right:7px;
+			margin-left:7px;
+		}
 		#userlist {
-
 			list-style:none;
 			padding:0;
 			margin:0;
@@ -163,7 +167,7 @@
 				<div id="userlist-full">
 					<ul id="userlist">
 
-						<li class="userlist-li pb-5" id="userlist-current-user">
+						<li class="userlist-li" id="userlist-current-user">
 							<div class="userlist-wrapper">
 								<div class="userlist-color-indicator" id="userlist-currentuser-color-indicator"></div>
 
@@ -182,9 +186,9 @@
 				</div>
 				<div id="userlist-light-box" class="hidden">
 					<div id="userlist-light-current-user">
-						<label>You:</label>
+						<label>Your Username:</label>
 						<input type="text" class="form-control" placeholder="Username" id="userlist-light-currentuser-input" placeholder="user">
-						<button class="btn btn-block btn-success mt-2 mb-4">Update Username</button>
+						<button class="btn btn-block btn-success mt-2 mb-4">Update</button>
 					</div>
 					<ul id="userlist-light">
 
@@ -206,7 +210,7 @@
 <script src="/js/split.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/bootstrap-select.js" type="text/javascript" charset="utf-8"></script>
 
-<script src="js/firepad.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/firepad.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-database.js"></script>
@@ -305,8 +309,10 @@
 		firebase.database().ref("/f/test/data/language/").set($("#lang-select").val());
 	}
 	function addUserToUserlist(username, color) {
-		console.log(username);
-		var html = `<li class="userlist-li userlist-addedbyjs"><div class="userlist-wrapper"><div class="userlist-color-indicator" style="background-color:${color};"></div> <div class="userlist-username">${username}</div></div></li>`;
+		var html = `<li class="userlist-li userlist-addedbyjs"><div class="userlist-wrapper">` +
+			`<div class="userlist-color-indicator" style="background-color:${color};"></div> ` +
+			`<div class="userlist-username">${username}</div></div></li>` //+
+			/*`<br class="userlist-linebreak userlist-addedbyjs"><br class="userlist-linebreak userlist-addedbyjs">`*/;
 		var lighthtml = `<li class="userlist-light-li userlist-addedbyjs">${username}</li>`;
 
 		$("#userlist").append(html);
@@ -317,9 +323,8 @@
 		$(".userlist-addedbyjs").remove();
 	}
 	function onUserlistResize() {
-		console.log($("#userlist-box").width());
 
-		if ($("#userlist-box").width() < 275) {
+		if ($("#userlist-box").width() < 290) {
 
 			$("#userlist-full").addClass("hidden");
 			$("#userlist-light-box").removeClass("hidden");
@@ -337,7 +342,7 @@
 
 			// if the confirm box doesn't already exist
 			if ($("#userlist-currentuser-input-confirmbox").length == 0) {
-				$("#userlist-currentuser-input").append(html);
+				$("#userlist-currentuser-inputgroup").append(html);
 			}
 
 		} else {
@@ -378,11 +383,13 @@
 		updateSidebarTheme(editor);
 	});
 	var userId;
+	var userColor;
 	if (localStorage.getItem("techedit-userId") == null) {
 		userId = "user " + Math.floor(Math.random() * 9999999999).toString();
 	} else {
 		userId = localStorage.getItem("techedit-userId");
 	}
+	setConfirmBoxVisible(false);
 
 	// Get Firebase Database reference.
 	var firepadRef = firebase.database().ref("/f/test/");
@@ -410,13 +417,13 @@
 		for (var key in users) {
 			if (users.hasOwnProperty(key)) {
 				if (key != userId) {
-					console.log(key);
 					addUserToUserlist(users[key].username || key, users[key].color);
 
 				} else {
 					$("#userlist-currentuser-input").val(key);
 					$("#userlist-light-currentuser-input").val(key);
 					$("#userlist-currentuser-color-indicator").css("background-color", users[key].color);
+					userColor = users[key].color;
 				}
 			}
 		}
@@ -437,6 +444,22 @@
 		editor.setTheme("ace/theme/" + $("#theme-select").val());
 		updateSidebarTheme(editor);
 
+	});
+
+	$("#userlist-currentuser-inputgroup").on("click", "#userlist-currentuser-input-confirm", function() {
+		var username = $("#userlist-currentuser-input").val();
+		setConfirmBoxVisible(false);
+		userId = username;
+		localStorage.setItem("techedit-userId", username);
+		$("#userlist-light-currentuser-input").val(username);
+	});
+	$("#userlist-currentuser-input").keyup(function() {
+
+		if (userId !== $(this).val()) {
+			setConfirmBoxVisible(true);
+		} else {
+			setConfirmBoxVisible(false);
+		}
 	});
 </script>
 </body>
