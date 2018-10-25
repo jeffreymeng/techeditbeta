@@ -39,57 +39,33 @@
 
 	<link href="/css/bootstrap-select.css" rel="stylesheet">
 
+	<!-- cookie consent -->
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+	<script>
+		window.addEventListener("load", function(){
+			window.cookieconsent.initialise({
+				"palette": {
+					"popup": {
+						"background": "#000"
+					},
+					"button": {
+						"background": "#f1d600"
+					}
+				},
+				"position": "bottom-right",
+				"content": {
+					"message": "Techedit uses cookies to ensure you get the best experience on our website.",
+					"link": "Learn more about cookies"
+				}
+			})});
+	</script>
+
+
 	<link href="/css/techedit.css" rel="stylesheet">
 	<link href="/css/editor.css" rel="stylesheet">
 	<style>
-		.userlist-color-indicator {
-			display: inline-block;
-			width: 32px;
-			height: 32px;
-			border: 1px solid #ccc;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			padding-right:10px;
-		}
-		.userlist-username {
-			display:inline-block;
-			height: 33px;
-			line-height:33px;
-			vertical-align: middle;
 
-			padding-left:10px;
-
-		}
-		.userlist-li {
-			display:inline-block;
-			margin-right:7px;
-			margin-left:7px;
-		}
-		#userlist {
-			list-style:none;
-			padding:0;
-			margin:0;
-
-		}
-		#userlist-currentuser-inputgroup, #userlist-currentuser-input {
-			height:32px;
-		}
-		#userlist-currentuser-input, #userlist-currentuser-input-confirm {
-			/* Box Shadow doesn't look good with the other css */
-			outline: none;
-
-			-webkit-box-shadow: none !important;
-			-moz-box-shadow: none !important;
-			box-shadow: none !important;
-		}
-		.userlist-wrapper {
-			margin: 0 auto;
-		}
-
-		.userlist-color-indicator, .userlist-username {
-			float: left;
-		}
 	</style>
 </head>
 <body>
@@ -132,6 +108,7 @@
 	</div>
 	<div id="sidebar" class="split">
 		<div class="p-3">
+			<div id="alertbox"></div>
 			<h1>index.html</h1>
 			<h3>Settings</h3>
 			<div id="settings-form" class="form">
@@ -163,7 +140,7 @@
 			</div>
 			<div id="userlist-box">
 				<h3>Active</h3>
-
+				<div id="userlist-alertbox"></div>
 				<div id="userlist-full">
 					<ul id="userlist">
 
@@ -174,7 +151,7 @@
 								<div class="userlist-username">
 									<div class="input-group mb-3" id="userlist-currentuser-inputgroup">
 
-										<input type="text" class="form-control" placeholder="Username" id="userlist-currentuser-input" placeholder="user">
+										<input type="text" class="form-control" placeholder="Username" id="userlist-currentuser-input">
 										<div class="input-group-append" id="userlist-currentuser-input-confirmbox">
 											<button class="btn btn-success" type="button" id="userlist-currentuser-input-confirm">&check;</button>
 										</div>
@@ -187,8 +164,8 @@
 				<div id="userlist-light-box" class="hidden">
 					<div id="userlist-light-current-user">
 						<label>Your Username:</label>
-						<input type="text" class="form-control" placeholder="Username" id="userlist-light-currentuser-input" placeholder="user">
-						<button class="btn btn-block btn-success mt-2 mb-4">Update</button>
+						<input type="text" class="form-control" placeholder="Username" id="userlist-light-currentuser-input">
+						<button class="btn btn-block btn-success mt-2 mb-4" id="userlist-light-currentuser-input-confirm">Update</button>
 					</div>
 					<ul id="userlist-light">
 
@@ -202,14 +179,12 @@
 </div>
 
 <!-- Bootstrap core JavaScript -->
-<script src="/js/jquery.min.js">
-</script>
-<script src="/js/bootstrap.bundle.min.js">
-</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/split.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/bootstrap-select.js" type="text/javascript" charset="utf-8"></script>
-
+<script src="/js/cookie.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/firepad.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-auth.js"></script>
@@ -228,11 +203,10 @@
 	firebase.initializeApp(config);
 </script>
 <script src="/js/techedit.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/edit-helpers.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
-	function getBrightness(r, g, b) {
-		return (r * 299 + g * 587 + b * 114) / 1000;
-	}
+
 	function updateSidebarTheme(editor, light) {
 
 		var themeColor = getComputedStyle(editor.renderer.scroller).backgroundColor;
@@ -265,41 +239,7 @@
 
 
 	}
-	function adjustBrightness(color, amt) {
 
-		var usePound = false;
-
-		if (color[0] == "#") {
-			color = color.slice(1);
-			usePound = true;
-		}
-
-		var R = parseInt(color.substring(0,2),16);
-		var G = parseInt(color.substring(2,4),16);
-		var B = parseInt(color.substring(4,6),16);
-
-		// to make the colour less bright than the input
-		// change the following three "+" symbols to "-"
-		R = R + amt;
-		G = G + amt;
-		B = B + amt;
-
-		if (R > 255) R = 255;
-		else if (R < 0) R = 0;
-
-		if (G > 255) G = 255;
-		else if (G < 0) G = 0;
-
-		if (B > 255) B = 255;
-		else if (B < 0) B = 0;
-
-		var RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
-		var GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
-		var BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
-
-		return (usePound?"#":"") + RR + GG + BB;
-
-	}
 	function stopLoading() {
 		$("#loader").addClass("hidden");
 		$("#split-wrapper").removeClass("hidden");
@@ -323,12 +263,17 @@
 		$(".userlist-addedbyjs").remove();
 	}
 	function onUserlistResize() {
-
-		if ($("#userlist-box").width() < 290) {
-
+		var fullHiddenBefore = $("#userlist-full").hasClass("hidden");
+		if ($("#userlist-box").width() < 325) {
+			if (!fullHiddenBefore) {
+				$("#userlist-light-currentuser-input").val($("#userlist-currentuser-input").val());
+			}
 			$("#userlist-full").addClass("hidden");
 			$("#userlist-light-box").removeClass("hidden");
 		} else {
+			if (fullHiddenBefore) {
+				$("#userlist-currentuser-input").val($("#userlist-light-currentuser-input").val());
+			}
 			$("#userlist-full").removeClass("hidden");
 			$("#userlist-light-box").addClass("hidden");
 		}
@@ -337,7 +282,7 @@
 		if (visible) {
 			var html =
 				`<div class="input-group-append" id="userlist-currentuser-input-confirmbox">` +
-					`<button class="btn btn-success" type="button" id="userlist-currentuser-input-confirm">&check;</button>` +
+					`<button class="btn btn-success" type="button" id="userlist-currentuser-input-confirm">submit</button>` +
 				`</div>`;
 
 			// if the confirm box doesn't already exist
@@ -350,117 +295,251 @@
 			$("#userlist-currentuser-input-confirmbox").detach();
 		}
 	}
+	function setUserData(user, path, value) {//path should be relative to /users/$UID/
+		if (user != null) {
+			firebase.database().ref("/users/" + user.uid + "/data/" + (path.replaceAll(".", "/") || "")).set(value);
+
+		} else {
+			console.log(value);
+			console.log(path);
+			console.log(data);
+			var data = Cookies.get("techedit-anonymous-user-data");
+			if (data == undefined) {
+				data = {}
+			} else {
+				data = JSON.parse(data);
+			}
+
+			if (path == null || path == "") {
+				data = value;
+			} else {
+				setObjectValueByString(path, data, value);
+			}
+			console.log(data);
+			Cookies.set("techedit-anonymous-user-data", data, {expires:1});
+
+		}
+	}
+	function setDisplayName(userId, userDisplayName) {//path should be relative to /users/$UID/
+		console.log(userId);
+		console.log(userDisplayName);
+		firebase.database().ref("/f/" +fileId + "/users/" + userId + "/displayName/").set(userDisplayName);
+	}
+	function stripUsername(username) {
+
+		return username.substring(0, 32).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+	}
+	function reverseStripUsername(username) {
+
+		return username.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+
+	}
+	function safeStripUsername(username) {
+		//this can be used to strip a username that should already be stripped
+		//if the username has all quotes then it each quote could potentially end up being 6 characters.
+		return username.substring(0, 32 * 6).replace(/</g, '&lt;').replace(/"/g, '&quot;');
+	}
+
+	//specifying a type will ensure that only one alert of that type ever exists. Newer alerts
+	//override old ones
+	function addAlert(message, strong, level, location, type) {
+		var fullTypeText = "";
+		if (type) {
+			$(".techedit-alert-type-" + type).remove();
+			fullTypeText = "techedit-alert-type-" + type;
+		}
+		var alertbox = "alertbox";
+		if (alertbox) {
+			alertbox = location + "-" + alertbox;
+		}
+		var level = level || "danger";
+		var html = `<div class="alert alert-${level} alert-dismissible fade show ${fullTypeText}" role="alert">` +
+					  	`<strong>${strong}</strong> ${message}` +
+					  	`<button type="button" class="close" data-dismiss="alert" aria-label="Close">` +
+							`<span aria-hidden="true">&times;</span>` +
+					  	`</button>`
+					`</div>`;
+		$("#" + alertbox).append(html);
+
+	}
 </script>
 <script>
 	var editor = ace.edit("editor");
+	var fileId = "test";
+	firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
+			firebase.database().get("/users/" + user.uid + "/data/").once("value").then(function(snapshot) {
+				var userdata = snapshot.val();
+				userdata.uid = user.uid;
+				main(user, userdata);
+			});
+		} else {
+			//user is null
+			var cookie = Cookies.get("techedit-anonymous-user-data");
+			if (cookie) {
+				cookie = JSON.parse(cookie);
+			}
+			var anonData = cookie;
+			var tempuid = firebase.database().ref("/f/" + fileId + "/users/").push().key;
+			var defaultData = {
+				uid:tempuid,
+				displayName:tempuid
+			};
+			var anonData = merge(defaultData, anonData);
+			setUserData(user, null, anonData);
 
-	editor.setTheme("ace/theme/monokai");
-	editor.getSession().setMode("ace/mode/html");
-	editor.setShowPrintMargin(false);
+			main(user, anonData);
 
-
-	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
-		$('.selectpicker').selectpicker('mobile');
-	}
-
-
-	var split = Split(["#editor-box", "#sidebar"],
-		{
-			onDragEnd:function() {
-				editor.resize();
-
-			},
-			onDrag:onUserlistResize,
-			minSize:0,
-			sizes: [75, 25],
-		});
-
-	//check for sidebar resize
-	$(window).resize(onUserlistResize);
-
-
-	editor.renderer.on("themeLoaded", function() {
-		updateSidebarTheme(editor);
+		}
 	});
-	var userId;
-	var userColor;
-	if (localStorage.getItem("techedit-userId") == null) {
-		userId = "user " + Math.floor(Math.random() * 9999999999).toString();
-	} else {
-		userId = localStorage.getItem("techedit-userId");
-	}
-	setConfirmBoxVisible(false);
+	var theme;
+	var userDisplayName;
+	function main(user, userdata) {
 
-	// Get Firebase Database reference.
-	var firepadRef = firebase.database().ref("/f/test/");
-	firebase.database().ref("/f/test/data/").once("value").then(function(snapshot) {
-		var data = snapshot.val();
-		$("#lang-select").selectpicker("val", data.language);
-		$("#lang-select").on("change", onLanguageChange);
-		var firepad = Firepad.fromACE(firepadRef, editor, {
-			userId:userId
-		});
-		firepad.setUserId(userId);
+		init(user, userdata);
 
-		firepad.on("ready", function() {
-			stopLoading();
-			onUserlistResize();
 
+		//define listeners
+
+		editor.renderer.on("themeLoaded", function() {
+			updateSidebarTheme(editor);
 		});
 
-	});
+		firebase.database().ref("/f/" + fileId + "/users/").on("value", function(snapshot) {
+			resetUserlist();
+			var users = snapshot.val();
+			//https://stackoverflow.com/a/684692/5511561 (slightly adapted)
+			for (var key in users) {
+				if (users.hasOwnProperty(key)) {
+					if (key != userdata.uid) {
+						addUserToUserlist(safeStripUsername(users[key].displayName) || key, users[key].color);
 
-	firebase.database().ref("/f/test/users/").on("value", function(snapshot) {
-		resetUserlist();
-		var users = snapshot.val();
-		//https://stackoverflow.com/a/684692/5511561 (slightly adapted)
-		for (var key in users) {
-			if (users.hasOwnProperty(key)) {
-				if (key != userId) {
-					addUserToUserlist(users[key].username || key, users[key].color);
-
-				} else {
-					$("#userlist-currentuser-input").val(key);
-					$("#userlist-light-currentuser-input").val(key);
-					$("#userlist-currentuser-color-indicator").css("background-color", users[key].color);
-					userColor = users[key].color;
+					} else {
+						$("#userlist-currentuser-input").val(reverseStripUsername(userDisplayName));
+						$("#userlist-light-currentuser-input").val(reverseStripUsername(userDisplayName));
+						$("#userlist-currentuser-color-indicator").css("background-color", userdata.color);
+					}
 				}
 			}
-		}
 
 
-	});
-	firebase.database().ref("/f/test/data/language/").on("value", function(snapshot) {
-		$("#lang-select").off("change", onLanguageChange);
-		var lang = snapshot.val();
-		$("#lang-select").selectpicker("val", lang);
-		editor.getSession().setMode("ace/mode/" + lang);
-		$("#lang-select").on("change", onLanguageChange);
-	});
+		});
+		firebase.database().ref("/f/" + fileId + "/data/language/").on("value", function(snapshot) {
+			$("#lang-select").off("change", onLanguageChange);
+			var lang = snapshot.val();
+			$("#lang-select").selectpicker("val", lang);
+			editor.getSession().setMode("ace/mode/" + lang);
+			$("#lang-select").on("change", onLanguageChange);
+		});
 
 
 
-	$("#theme-select").change(function() {
-		editor.setTheme("ace/theme/" + $("#theme-select").val());
-		updateSidebarTheme(editor);
+		$("#theme-select").change(function() {
+			editor.setTheme("ace/theme/" + $("#theme-select").val());
+			setUserData(user, "editor.theme", $("#theme-select").val());
+			updateSidebarTheme(editor);
 
-	});
+		});
 
-	$("#userlist-currentuser-inputgroup").on("click", "#userlist-currentuser-input-confirm", function() {
-		var username = $("#userlist-currentuser-input").val();
-		setConfirmBoxVisible(false);
-		userId = username;
-		localStorage.setItem("techedit-userId", username);
-		$("#userlist-light-currentuser-input").val(username);
-	});
-	$("#userlist-currentuser-input").keyup(function() {
-
-		if (userId !== $(this).val()) {
-			setConfirmBoxVisible(true);
-		} else {
+		$("#userlist-currentuser-inputgroup").on("click", "#userlist-currentuser-input-confirm", function() {
+			var username = $("#userlist-currentuser-input").val();
 			setConfirmBoxVisible(false);
+			userDisplayName = stripUsername(username);
+			setUserData(user, "displayName", userDisplayName);
+			setDisplayName(userdata.uid, userDisplayName);
+			$("#userlist-light-currentuser-input").val(userDisplayName);
+		});
+		$("#userlist-light-currentuser-input-confirm").click(function() {
+			var username = $("#userlist-light-currentuser-input").val();
+
+			$("#userlist-light-currentuser-input-confirm").attr("disabled", "disabled");
+			userDisplayName = stripUsername(username);
+			setUserData(user, "displayName", userDisplayName);
+			setDisplayName(userdata.uid, userDisplayName);
+			$("#userlist-light-currentuser-input").val(userDisplayName);
+
+		});
+		$("#userlist-currentuser-input").keyup(function() {
+
+			if (userDisplayName !== $(this).val()) {
+				setConfirmBoxVisible(true);
+			} else {
+				setConfirmBoxVisible(false);
+			}
+		});
+
+		$("#userlist-light-currentuser-input").keyup(function() {
+			if (userDisplayName !== $(this).val()) {
+				$("#userlist-light-currentuser-input-confirm").attr("disabled", false);
+			} else {
+				$("#userlist-light-currentuser-input-confirm").attr("disabled", "disabled");
+			}
+
+		});
+
+	}
+	function init(user, userdata) {
+
+		if (userdata.editor) {
+			//if userdata.editor.theme is undefined it will be caught at the if statement
+			theme = userdata.editor.theme;
 		}
-	});
+		if (theme == undefined) {
+			theme = "monokai";
+			setConfirmBoxVisible(user, "editor.theme", theme);
+		}
+
+		userDisplayName = userdata.displayName;
+		setConfirmBoxVisible(false);
+		$("#userlist-light-currentuser-input-confirm").attr("disabled", "disabled");
+
+		editor.setTheme("ace/theme/" + theme);
+		$("#theme-select").selectpicker("val", theme);
+		editor.getSession().setMode("ace/mode/text");
+		editor.setShowPrintMargin(false);
+
+
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+			$(".selectpicker").selectpicker("mobile");
+			$(".selectpicker").attr("data-mobile", "true");
+		}
+
+
+		var split = Split(["#editor-box", "#sidebar"],
+			{
+				onDragEnd:function() {
+					editor.resize();
+
+				},
+				onDrag:onUserlistResize,
+				minSize:0,
+				sizes: [73, 27],
+			});
+
+		//check for sidebar resize
+		$(window).resize(onUserlistResize);
+		// Get Firebase Database reference.
+
+		var firepadRef = firebase.database().ref("/f/" + fileId);
+
+		firebase.database().ref("/f/" + fileId + "/data/").once("value").then(function(snapshot) {
+			var data = snapshot.val();
+			$("#lang-select").selectpicker("val", data.language);
+			$("#lang-select").on("change", onLanguageChange);
+			var firepad = Firepad.fromACE(firepadRef, editor, {
+				userId:userdata.uid
+			});
+
+			firepad.on("ready", function() {
+				stopLoading();
+				onUserlistResize();
+
+			});
+
+		});
+	}
+
 </script>
 </body>
 </html>

@@ -72,3 +72,6 @@ header.masthead {
 .hidden {
 	display:none !important;
 }
+.invisible {
+	visibility:hidden !important;
+}
