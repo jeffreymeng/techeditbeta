@@ -327,7 +327,7 @@
 	}
 	function stripUsername(username) {
 
-		return username.substring(0, 32).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+		return username.substring(0, 64).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 	}
 	function reverseStripUsername(username) {
@@ -338,7 +338,7 @@
 	function safeStripUsername(username) {
 		//this can be used to strip a username that should already be stripped
 		//if the username has all quotes then it each quote could potentially end up being 6 characters.
-		return username.substring(0, 32 * 6).replace(/</g, '&lt;').replace(/"/g, '&quot;');
+		return username.substring(0, 64 * 6).replace(/</g, '&lt;').replace(/"/g, '&quot;');
 	}
 
 	//specifying a type will ensure that only one alert of that type ever exists. Newer alerts
@@ -384,7 +384,8 @@
 			var tempuid = firebase.database().ref("/f/" + fileId + "/users/").push().key;
 			var defaultData = {
 				uid:tempuid,
-				displayName:tempuid
+				displayName:tempuid,
+				color:colorFromUserId(tempuid)
 			};
 			var anonData = merge(defaultData, anonData);
 			setUserData(user, null, anonData);
@@ -413,7 +414,7 @@
 			for (var key in users) {
 				if (users.hasOwnProperty(key)) {
 					if (key != userdata.uid) {
-						addUserToUserlist(safeStripUsername(users[key].displayName) || key, users[key].color);
+						addUserToUserlist(safeStripUsername(users[key].displayName || key), users[key].color);
 
 					} else {
 						$("#userlist-currentuser-input").val(reverseStripUsername(userDisplayName));
@@ -441,14 +442,13 @@
 			updateSidebarTheme(editor);
 
 		});
-
 		$("#userlist-currentuser-inputgroup").on("click", "#userlist-currentuser-input-confirm", function() {
 			var username = $("#userlist-currentuser-input").val();
 			setConfirmBoxVisible(false);
 			userDisplayName = stripUsername(username);
 			setUserData(user, "displayName", userDisplayName);
 			setDisplayName(userdata.uid, userDisplayName);
-			$("#userlist-light-currentuser-input").val(userDisplayName);
+			$("#userlist-light-currentuser-input").val(reverseStripUsername(userDisplayName));
 		});
 		$("#userlist-light-currentuser-input-confirm").click(function() {
 			var username = $("#userlist-light-currentuser-input").val();
@@ -457,7 +457,7 @@
 			userDisplayName = stripUsername(username);
 			setUserData(user, "displayName", userDisplayName);
 			setDisplayName(userdata.uid, userDisplayName);
-			$("#userlist-light-currentuser-input").val(userDisplayName);
+			$("#userlist-light-currentuser-input").val(reverseStripUsername(userDisplayName));
 
 		});
 		$("#userlist-currentuser-input").keyup(function() {
@@ -528,7 +528,8 @@
 			$("#lang-select").selectpicker("val", data.language);
 			$("#lang-select").on("change", onLanguageChange);
 			var firepad = Firepad.fromACE(firepadRef, editor, {
-				userId:userdata.uid
+				userId:userdata.uid,
+				color:userdata.color
 			});
 
 			firepad.on("ready", function() {
