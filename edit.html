@@ -417,7 +417,7 @@
 						addUserToUserlist(safeStripUsername(users[key].displayName || key), users[key].color);
 
 					} else {
-						if (userdata.color == null) {
+						if (users[key].color == null) {
 							//user has been deleted
 							firebase.database().ref("/f/" + fileId + "/users/" + key).set(null);
 							continue;
