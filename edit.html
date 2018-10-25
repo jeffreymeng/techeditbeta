@@ -417,6 +417,11 @@
 						addUserToUserlist(safeStripUsername(users[key].displayName || key), users[key].color);
 
 					} else {
+						if (userdata.color == null) {
+							//user has been deleted
+							firebase.database().ref("/f/" + fileId + "/users/" + key).set(null);
+							continue;
+						}
 						$("#userlist-currentuser-input").val(reverseStripUsername(userDisplayName));
 						$("#userlist-light-currentuser-input").val(reverseStripUsername(userDisplayName));
 						$("#userlist-currentuser-color-indicator").css("background-color", userdata.color);
