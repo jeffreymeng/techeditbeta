@@ -414,14 +414,16 @@
 			for (var key in users) {
 				if (users.hasOwnProperty(key)) {
 					if (key != userdata.uid) {
-						addUserToUserlist(safeStripUsername(users[key].displayName || key), users[key].color);
-
-					} else {
 						if (users[key].color == null) {
+							console.log(1)
 							//user has been deleted
 							firebase.database().ref("/f/" + fileId + "/users/" + key).set(null);
 							continue;
 						}
+						addUserToUserlist(safeStripUsername(users[key].displayName || key), users[key].color);
+
+					} else {
+
 						$("#userlist-currentuser-input").val(reverseStripUsername(userDisplayName));
 						$("#userlist-light-currentuser-input").val(reverseStripUsername(userDisplayName));
 						$("#userlist-currentuser-color-indicator").css("background-color", userdata.color);
