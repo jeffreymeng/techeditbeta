@@ -65,7 +65,20 @@
 	<link href="/css/techedit.css" rel="stylesheet">
 	<link href="/css/editor.css" rel="stylesheet">
 	<style>
+		#sidebar {
+			display: flex;
+			flex-flow: column;
+		}
 
+		#chat-messages {
+			flex: 2;
+			overflow: auto;
+
+
+		}
+		#chat-input {
+			resize:none;
+		}
 	</style>
 </head>
 <body>
@@ -108,12 +121,12 @@
 		<div id="editor"></div>
 	</div>
 	<div id="sidebar">
-		<div class="p-3">
+		<div id="sidebar-wrapper" class="px-3 pt-3">
 			<h1>index.html</h1>
 			<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#settings-modal">
 				Settings
 			</button>
-			<div id="userlist-box">
+			<div id="userlist-box" class="pt-3">
 
 				<h3>Active</h3>
 				<div id="userlist-alertbox"></div>
@@ -146,7 +159,17 @@
 					</ul>
 				</div>
 			</div>
+			<h3>Chat</h3>
 		</div>
+
+		<div id="chat-messages" class="mx-3 mb-3">
+			<p id="chat-loading">Loading</p>
+		</div>
+		<div id="chat-form" class="px-3 pb-3">
+			<textarea class="form-control" type="text" placeholder="Type a message..." id="chat-input"></textarea>
+			<button class="btn btn-primary btn-block mt-2" id="chat-button">Send</button>
+		</div>
+
 	</div>
 </div>
 
@@ -188,6 +211,7 @@
 							</div>
 							<div class="tab-pane fade" id="settings-tab-editor" role="tabpanel">
 								<h2>Editor Settings</h2>
+								<p class="text-muted">These changes only affect you, but are saved between each page you visit.</p>
 								<div class="form-group form-inline">
 									<label for="lang-select">Theme:</label>
 									<select class="selectpicker form-control" id="theme-select" data-live-search="true">
@@ -352,8 +376,10 @@
 		} else {
 			textColor = "#000000";
 			gutterColor = "#EEEEEE";
+			chatColor = "#d9d9d9";
 			$('.selectpicker').selectpicker("setStyle", "btn-secondary", "remove");
 			$('.selectpicker').selectpicker("setStyle", "btn-light", "add");
+
 		}
 		var backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
 
@@ -364,6 +390,8 @@
 		$("#sidebar").css("background-color", backgroundColor);
 		$("#sidebar").css("color", textColor);
 		$(".gutter").css("background-color", gutterColor);
+		$("#chat-messages").css("background-color", "rgba(" + r + ", " + g + ", " + b + ", 0.9)");
+
 
 
 	}
@@ -462,6 +490,16 @@
 	function reverseStripUsername(username) {
 
 		return username.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+
+	}
+	function stripText(text) {
+
+		return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+	}
+	function reverseText(text) {
+
+		return text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
 
 	}
 	function safeStripUsername(username) {
@@ -712,7 +750,35 @@
 
 		});
 
+		updateLoadingStatus("Techedit.chat");
+		firebase.database().ref("/f/" + fileId + "/chat/").on("child_added", function(snapshot) {
+			var message = snapshot.val();
+			if (!($("#chat-loading").hasClass("hidden"))) {
+				$("#chat-loading").addClass("hidden");
+			}
 
+			console.log(message);
+			$("#chat-messages").append("<p>" + message.text + "</p>");
+
+			//https://stackoverflow.com/a/21048661/5511561
+			var chatMessagesElement = $("#chat-messages");
+			chatMessagesElement.scrollTop(chatMessagesElement.prop("scrollHeight"));
+		});
+		$("#chat-input").keyup(function(e) {
+			if(e.which === 13 && !e.shiftKey) {
+				$("#chat-button").click();
+			}
+		});
+		$("#chat-button").click(function() {
+			//TODO: closely evaluate XSS
+			var message = stripText($("#chat-input").val());
+			$("#chat-input").val("");
+			firebase.database().ref("/f/" + fileId + "/chat/").push({
+				text:message,
+				timestamp:new Date().getTime(),
+				author:userdata.uid
+			});
+		});
 		updateLoadingStatus("Techedit.ui");
 
 	}
@@ -733,8 +799,7 @@
 
 		updateLoadingStatus("Techedit.editor.theme");
 		editor.setTheme("ace/theme/" + theme);
-		$("#theme-select").selectpicker("val", theme)
-		;
+		$("#theme-select").selectpicker("val", theme);
 		updateLoadingStatus("Techedit.editor.language");
 		editor.getSession().setMode("ace/mode/text");
 
@@ -773,7 +838,7 @@
 
 				},
 				onDrag:onUserlistResize,
-				minSize:0,
+				minSize:[0,0],
 				sizes: [73, 27],
 			});
 

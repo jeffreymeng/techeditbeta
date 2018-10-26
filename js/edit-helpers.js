@@ -86,6 +86,7 @@ function deleteAllCookies() {
 		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 	}
 	Cookies.remove("cookieconsent_status");
+	Cookies.remove("techedit-anonymous-user-data");
 }
 function merge(defualt,newObject){
 	var merged = {};

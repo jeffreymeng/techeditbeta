@@ -33,19 +33,7 @@ html, body {
 .split, .gutter.gutter-horizontal {
 	float: left;
 }
-#sidebar {
-	overflow-x:auto;
-	overflow-y:hidden;
 
-}
-#settings-box, #userlist-box {
-
-	overflow-y:auto;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-
-}
 
 #split-wrapper {
 
