@@ -127,3 +127,8 @@ function rgb2hex (r, g, b) {
 	}
 	return '#' + digits(r) + digits(g) + digits(b);
 }
+(function($) {
+	$.fn.hasScrollBar = function() {
+		return this.get(0).scrollHeight > this.height();
+	}
+})(jQuery);

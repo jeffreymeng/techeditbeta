@@ -163,7 +163,7 @@
 		</div>
 
 		<div id="chat-messages" class="mx-3 mb-3">
-			<p id="chat-loading">Loading</p>
+			<p id="chat-loading">No Chat Messages Yet. Be the first!</p>
 		</div>
 		<div id="chat-form" class="px-3 pb-3">
 			<textarea class="form-control" type="text" placeholder="Type a message..." id="chat-input"></textarea>
@@ -405,8 +405,16 @@
 		$("#split-wrapper").addClass("hidden");
 	}
 	function onLanguageChange() {
+		var oldMode = editor.getSession().getMode().$id.substring("ace/mode/".length);
 		editor.getSession().setMode("ace/mode/" + $("#lang-select").val());
 		firebase.database().ref("/f/test/data/language/").set($("#lang-select").val());
+		firebase.database().ref("/f/" + fileId + "/chat/").push({
+			text:"Changed the language from " + oldMode + " to " + $("#lang-select").val(),
+			actionMsg:true,
+			timestamp:new Date().getTime(),
+			author:userId,
+			displayName:userDisplayName
+		});
 	}
 	function addUserToUserlist(username, color) {
 		var html = `<li class="userlist-li userlist-addedbyjs"><div class="userlist-wrapper">` +
@@ -477,10 +485,17 @@
 
 		}
 	}
-	function setDisplayName(userId, userDisplayName) {//path should be relative to /users/$UID/
+	function setDisplayName(userId, userDisplayName, oldDisplayName) {//path should be relative to /users/$UID/
 
 
 		firebase.database().ref("/f/" +fileId + "/users/" + userId + "/displayName/").set(userDisplayName);
+		firebase.database().ref("/f/" + fileId + "/chat/").push({
+			text:"Changed username from " + oldDisplayName + " to " + userDisplayName,
+			actionMsg:true,
+			timestamp:new Date().getTime(),
+			author:userId,
+			displayName:userDisplayName
+		});
 	}
 	function stripUsername(username) {
 
@@ -587,7 +602,9 @@
 	load();
 	var theme;
 	var userDisplayName;
+	var userId;
 	function main(user, userdata) {
+		userId = userdata.uid;
 
 		init(user, userdata);
 
@@ -645,21 +662,23 @@
 
 		updateLoadingStatus("Techedit.user.username.change");
 		$("#userlist-currentuser-inputgroup").on("click", "#userlist-currentuser-input-confirm", function() {
+			var oldName = userDisplayName;
 			var username = $("#userlist-currentuser-input").val();
 			setConfirmBoxVisible(false);
 			userDisplayName = stripUsername(username);
 			setUserData(user, "displayName", userDisplayName);
-			setDisplayName(userdata.uid, userDisplayName);
+			setDisplayName(userdata.uid, userDisplayName, oldName);
 			$("#userlist-light-currentuser-input").val(reverseStripUsername(userDisplayName));
 		});
 
 		$("#userlist-light-currentuser-input-confirm").click(function() {
+			var oldName = userDisplayName;
 			var username = $("#userlist-light-currentuser-input").val();
 
 			$("#userlist-light-currentuser-input-confirm").attr("disabled", "disabled");
 			userDisplayName = stripUsername(username);
 			setUserData(user, "displayName", userDisplayName);
-			setDisplayName(userdata.uid, userDisplayName);
+			setDisplayName(userdata.uid, userDisplayName, oldName);
 			$("#userlist-light-currentuser-input").val(reverseStripUsername(userDisplayName));
 
 		});
@@ -758,11 +777,16 @@
 			}
 
 			console.log(message);
-			$("#chat-messages").append("<p>" + message.text + "</p>");
+			if (message.actionMsg != undefined && message.actionMsg) {
+				$("#chat-messages").append("<p><b>" + (message.displayName || ("user " + message.author)) + "</b>: <i>" + message.text + "</i></p>");
+			} else {
+				$("#chat-messages").append("<p><b>" + (message.displayName || ("user " + message.author)) + "</b>: " + message.text + "</p>");
+			}
 
-			//https://stackoverflow.com/a/21048661/5511561
-			var chatMessagesElement = $("#chat-messages");
-			chatMessagesElement.scrollTop(chatMessagesElement.prop("scrollHeight"));
+			$('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+
+
+
 		});
 		$("#chat-input").keyup(function(e) {
 			if(e.which === 13 && !e.shiftKey) {
@@ -770,15 +794,19 @@
 			}
 		});
 		$("#chat-button").click(function() {
-			//TODO: closely evaluate XSS
+			//TODO: allow markdown, account for xss
+			//TODO: Lazy load
 			var message = stripText($("#chat-input").val());
 			$("#chat-input").val("");
 			firebase.database().ref("/f/" + fileId + "/chat/").push({
 				text:message,
 				timestamp:new Date().getTime(),
-				author:userdata.uid
+				author:userdata.uid,
+				displayName:userDisplayName,
+				actionMsg:false
 			});
 		});
+
 		updateLoadingStatus("Techedit.ui");
 
 	}
@@ -865,7 +893,14 @@
 			firepad.on("ready", function() {
 				updateLoadingStatus("Techedit.final");
 				stopLoading();
+
 				onUserlistResize();
+
+				// We need this because when the document is loading, the chat-messages div is not visible and
+				// therefore it's scrollHeight will be 0 and it will not scroll.
+				// After the page is loaded, the div is scrolled on each new message in the firebase
+				// .on function.
+				$('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
 
 			});
 
