@@ -35,7 +35,18 @@ html, body {
 }
 #sidebar {
 	overflow-x:auto;
+	overflow-y:hidden;
+
 }
+#settings-box, #userlist-box {
+
+	overflow-y:auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+}
+
 #split-wrapper {
 
 	display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
@@ -48,6 +59,9 @@ html, body {
 }
 .gutter.gutter-horizontal {
 	cursor: ew-resize;
+}
+.gutter.gutter-vertical {
+	cursor: ns-resize;
 }
 .gutter {
 	background-color: #eee;
@@ -93,6 +107,7 @@ html, body {
 	margin:0;
 
 }
+
 #userlist-currentuser-inputgroup, #userlist-currentuser-input, #userlist-currentuser-input-confirm {
 	height:32px;
 }
@@ -115,6 +130,18 @@ html, body {
 	float: left;
 }
 
+
+#settings-modal .modal-header {
+	border-bottom: 1px solid #ced4da;
+}
+#settings-modal .modal-footer {
+	border-top: 1px solid #ced4da;
+}
+
+/* Sorry, Firepad! */
+.powered-by-firepad {
+	display:none;
+}
 /* loader: http://tobiasahlin.com/spinkit/ */
  .spinner {
 	 margin: 100px auto 0;

@@ -70,7 +70,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
 	<a class="navbar-brand" href="/">Techedit</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-toggle" aria-controls="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -101,53 +101,27 @@
 		<div class="bounce2"></div>
 		<div class="bounce3"></div>
 	</div>
+	<p id="loader-module-wrapper" class="">Loading <span id="loader-module">Techedit.resources</span></p>
 </div>
 <div id="split-wrapper" class="hidden">
 	<div id="editor-box" class="split">
 		<div id="editor"></div>
 	</div>
-	<div id="sidebar" class="split">
+	<div id="sidebar">
 		<div class="p-3">
-			<div id="alertbox"></div>
 			<h1>index.html</h1>
-			<h3>Settings</h3>
-			<div id="settings-form" class="form">
-				<div class="form-group form-inline">
-					<label for="lang-select">Language:</label>
-					<select class="selectpicker form-control" id="lang-select">
-						<option value="html">HTML</option>
-						<option value="css">CSS</option>
-						<option value="javascript">Javascript</option>
-						<option value="java">Java</option>
-						<option value="text">Plain Text</option>
-
-					</select>
-				</div>
-				<div class="form-group form-inline">
-					<label for="lang-select">Theme:</label>
-					<select class="selectpicker form-control" id="theme-select">
-						<optgroup label="Light">
-							<option value="xcode">Xcode</option>
-							<option value="dawn">Dawn</option>
-							<option value="solarized_light">Solarized Light</option>
-						</optgroup>
-						<optgroup label="Dark">
-							<option value="monokai" selected>Monokai</option>
-							<option value="solarized_dark">Solarized Dark</option>
-						</optgroup>
-					</select>
-				</div>
-			</div>
+			<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#settings-modal">
+				Settings
+			</button>
 			<div id="userlist-box">
+
 				<h3>Active</h3>
 				<div id="userlist-alertbox"></div>
 				<div id="userlist-full">
 					<ul id="userlist">
-
 						<li class="userlist-li" id="userlist-current-user">
 							<div class="userlist-wrapper">
 								<div class="userlist-color-indicator" id="userlist-currentuser-color-indicator"></div>
-
 								<div class="userlist-username">
 									<div class="input-group mb-3" id="userlist-currentuser-inputgroup">
 
@@ -174,8 +148,156 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="settings-modal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content bg-editor">
+			<div class="modal-header">
+				<h5 class="modal-title">Settings</h5>
+				<button type="button" class="close color-editor" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-3">
+						<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+							<a class="nav-link active" data-toggle="pill" href="#settings-tab-document" role="tab" aria-selected="true">Document</a>
+							<a class="nav-link" data-toggle="pill" href="#settings-tab-editor" role="tab" aria-selected="false">Editor</a>
+							<a class="nav-link" data-toggle="pill" href="#settings-tab-user" role="tab" aria-selected="false">Anonymous User Data</a>
+
+						</div>
+					</div>
+					<div class="col-9">
+						<div class="tab-content" id="v-pills-tabContent">
+							<div class="tab-pane fade show active" id="settings-tab-document" role="tabpanel">
+								<h2>Document Settings</h2>
+								<p class="text-muted">Changes made here will be changed for everyone on the document instantly!</p>
+								<div class="form-group form-inline">
+									<label for="lang-select">Language:</label>
+									<select class="selectpicker form-control" id="lang-select">
+										<option value="html">HTML</option>
+										<option value="css">CSS</option>
+										<option value="javascript">Javascript</option>
+										<option value="java">Java</option>
+										<option value="text">Plain Text</option>
+
+									</select>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="settings-tab-editor" role="tabpanel">
+								<h2>Editor Settings</h2>
+								<div class="form-group form-inline">
+									<label for="lang-select">Theme:</label>
+									<select class="selectpicker form-control" id="theme-select" data-live-search="true">
+										<optgroup label="Light">
+
+											<option value="chrome" class="theme-light-other hidden">Chrome</option>
+											<option value="clouds" class="theme-light-other hidden">Clouds</option>
+											<option value="crimson_editor" class="theme-light-other hidden">Crimson Editor</option>
+											<option value="dawn" class="theme-light-other hidden">Dawn</option>
+											<option value="dreamweaver" class="theme-light-other hidden">Dreamweaver</option>
+											<option value="eclipse" class="theme-light-other hidden">Eclipse</option>
+											<option value="github" class="theme-light-recommended">GitHub</option>
+											<option value="iplastic" class="theme-light-other hidden">IPlastic</option>
+											<option value="solarized_light" class="theme-light-recommended">Solarized Light</option>
+											<option value="textmate" class="theme-light-other hidden">TextMate</option>
+											<option value="tomorrow" class="theme-light-recommended">Tomorrow</option>
+											<option value="xcode" class="theme-light-recommended">XCode</option>
+											<option value="kuroir" class="theme-light-other hidden">Kuroir</option>
+											<option value="katzenmilch" class="theme-light-other hidden">KatzenMilch</option>
+											<option value="sqlserver" class="theme-light-other hidden">SQL Server</option>
+										</optgroup>
+										<optgroup label="Dark">
+											<option value="ambiance" class="theme-light-other hidden">Ambiance</option>
+											<option value="chaos" class="theme-light-other hidden">Chaos</option>
+											<option value="clouds_midnight" class="theme-light-other hidden">Clouds Midnight</option>
+											<option value="dracula" class="theme-light-other hidden">Dracula</option>
+											<option value="cobalt" class="theme-light-other hidden">Cobalt</option>
+											<option value="gruvbox" class="theme-light-other hidden">Gruvbox</option>
+											<option value="gob" class="theme-light-other hidden">Green on Black</option>
+											<option value="idle_fingers" class="theme-light-other hidden">idle Fingers</option>
+											<option value="kr_theme" class="theme-light-other hidden">krTheme</option>
+											<option value="merbivore" class="theme-light-other hidden">Merbivore</option>
+											<option value="merbivore_soft" class="theme-light-other hidden">Merbivore Soft</option>
+											<option value="mono_industrial" class="theme-light-other hidden">Mono Industrial</option>
+											<option value="monokai" class="theme-light-recommended">Monokai</option>
+											<option value="pastel_on_dark" class="theme-light-other hidden">Pastel on dark</option>
+											<option value="solarized_dark" class="theme-light-recommended">Solarized Dark</option>
+											<option value="terminal" class="theme-light-other hidden">Terminal</option>
+											<option value="tomorrow_night" class="theme-light-recommended">Tomorrow Night</option>
+											<option value="tomorrow_night_blue" class="theme-light-other hidden">Tomorrow Night Blue</option>
+											<option value="tomorrow_night_bright" class="theme-light-other hidden">Tomorrow Night Bright</option>
+											<option value="tomorrow_night_eighties" class="theme-light-other hidden">Tomorrow Night 80s</option>
+											<option value="twilight" class="theme-light-other hidden">Twilight</option>
+											<option value="vibrant_ink" class="theme-light-other hidden">Vibrant Ink</option>
+										</optgroup>
+									</select>
+									<div class="custom-control custom-checkbox">
+										<input type="checkbox" class="custom-control-input" id="theme-select-popular-filter" checked>
+										<label class="custom-control-label" for="theme-select-popular-filter">Only display popular themes</label>
+									</div>
+								</div>
+
+								<div class="form-group form-inline">
+									<label for="keymap-select">Keymap:</label>
+									<select class="selectpicker form-control" id="keymap-select">
+											<option value="default" selected>Default</option>
+											<option value="vim">Vim</option>
+											<option value="emacs">Emacs</option>
+
+									</select>
+								</div>
 
 
+								<div class="custom-control custom-checkbox my-1 mr-sm-2">
+									<input type="checkbox" class="custom-control-input mt-3" id="print-margin-checkbox">
+									<label class="custom-control-label" for="print-margin-checkbox">Show Print Margin</label>
+
+								</div>
+								<div class="collapse" id="print-margin-collapse">
+									<div class="input-group">
+										<input type="number" class="form-control" value="80" min="1" id="print-margin-length">
+										<div class="input-group-append">
+											<span class="input-group-text" id="print-margin-length-addon"> Characters </span>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+							<div class="tab-pane fade" id="settings-tab-user" role="tabpanel">
+								<div id="settings-tab-user-main">
+									<h2>Anonymous User Data</h2>
+									<p>
+										Because you are not logged in, your settings are saved on your browser as cookies.
+									</p>
+									<button class="btn btn-block btn-danger" id="delete-user-data">Delete All User Data</button>
+									<p class="text-muted">This action will delete all your settings for ALL techedit documents and
+									restore them to the defaults.</p>
+								</div>
+								<div id="settings-tab-user-confirm" class="hidden">
+									<h2>Confirm deletion of ALL Data</h2>
+									<p>
+										Warning: This action is irreversible and will affect all Techedit Documents!<br>
+										Clicking the confirm button will delete all data, then reload the page.
+									</p>
+									<button class="btn btn-block btn-primary" id="delete-user-data-cancel">Cancel</button>
+									<button class="btn btn-block btn-danger" id="delete-user-data-confirm">I Understand, Reload This Page and Delete All My Data</button>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
 </div>
 
 <!-- Bootstrap core JavaScript -->
@@ -206,6 +328,8 @@
 <script src="/js/edit-helpers.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
+	updateLoadingStatus("Techedit.helper");
+
 
 	function updateSidebarTheme(editor, light) {
 
@@ -233,6 +357,10 @@
 		}
 		var backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
 
+		$(".bg-editor").css("background-color", backgroundColor);
+		$(".bg-editor").css("color", textColor);
+		$(".color-editor").css("color", textColor);
+
 		$("#sidebar").css("background-color", backgroundColor);
 		$("#sidebar").css("color", textColor);
 		$(".gutter").css("background-color", gutterColor);
@@ -243,6 +371,10 @@
 	function stopLoading() {
 		$("#loader").addClass("hidden");
 		$("#split-wrapper").removeClass("hidden");
+	}
+	function startLoading() {
+		$("#loader").removeClass("hidden");
+		$("#split-wrapper").addClass("hidden");
 	}
 	function onLanguageChange() {
 		editor.getSession().setMode("ace/mode/" + $("#lang-select").val());
@@ -300,9 +432,7 @@
 			firebase.database().ref("/users/" + user.uid + "/data/" + (path.replaceAll(".", "/") || "")).set(value);
 
 		} else {
-			console.log(value);
-			console.log(path);
-			console.log(data);
+
 			var data = Cookies.get("techedit-anonymous-user-data");
 			if (data == undefined) {
 				data = {}
@@ -315,14 +445,13 @@
 			} else {
 				setObjectValueByString(path, data, value);
 			}
-			console.log(data);
 			Cookies.set("techedit-anonymous-user-data", data, {expires:1});
 
 		}
 	}
 	function setDisplayName(userId, userDisplayName) {//path should be relative to /users/$UID/
-		console.log(userId);
-		console.log(userDisplayName);
+
+
 		firebase.database().ref("/f/" +fileId + "/users/" + userId + "/displayName/").set(userDisplayName);
 	}
 	function stripUsername(username) {
@@ -363,37 +492,61 @@
 		$("#" + alertbox).append(html);
 
 	}
+	function updateLoadingStatus(module) {
+		if (!this.loadList) this.loadList = [];
+		if (module) {
+			$("#loader-module").html(module);
+			this.loadList.push(module);
+		}
+
+		return this.loadList;
+	}
 </script>
 <script>
-	var editor = ace.edit("editor");
+	var editor;
 	var fileId = "test";
-	firebase.auth().onAuthStateChanged(function(user) {
-		if (user) {
-			firebase.database().get("/users/" + user.uid + "/data/").once("value").then(function(snapshot) {
-				var userdata = snapshot.val();
-				userdata.uid = user.uid;
-				main(user, userdata);
-			});
-		} else {
-			//user is null
-			var cookie = Cookies.get("techedit-anonymous-user-data");
-			if (cookie) {
-				cookie = JSON.parse(cookie);
-			}
-			var anonData = cookie;
-			var tempuid = firebase.database().ref("/f/" + fileId + "/users/").push().key;
-			var defaultData = {
-				uid:tempuid,
-				displayName:tempuid,
-				color:colorFromUserId(tempuid)
-			};
-			var anonData = merge(defaultData, anonData);
-			setUserData(user, null, anonData);
+	function load() {
+		startLoading();
 
-			main(user, anonData);
-
+		updateLoadingStatus("Techedit.user");
+		$("#editor").html("");
+		if (editor != null && editor.destroy) {
+			editor.destroy();
 		}
-	});
+		editor = ace.edit("editor");
+		fileId = "test";
+		firebase.auth().onAuthStateChanged(function (user) {
+			if (user) {
+				updateLoadingStatus("Techedit.user.profile");
+				firebase.database().get("/users/" + user.uid + "/data/").once("value").then(function (snapshot) {
+					var userdata = snapshot.val();
+					userdata.uid = user.uid;
+					main(user, userdata);
+				});
+			} else {
+				updateLoadingStatus("Techedit.localuser.profile");
+				//user is null
+				var cookie = Cookies.get("techedit-anonymous-user-data");
+				if (cookie) {
+					cookie = JSON.parse(cookie);
+				}
+				var anonData = cookie;
+				var tempuid = firebase.database().ref("/f/" + fileId + "/users/").push().key;
+				var defaultData = {
+					uid: tempuid,
+					displayName: tempuid,
+					color: colorFromUserId(tempuid),
+					editor: {}
+				};
+				var anonData = merge(defaultData, anonData);
+				setUserData(user, null, anonData);
+
+				main(user, anonData);
+
+			}
+		});
+	}
+	load();
 	var theme;
 	var userDisplayName;
 	function main(user, userdata) {
@@ -402,11 +555,12 @@
 
 
 		//define listeners
-
+		updateLoadingStatus("Techedit.editor.theme.update");
 		editor.renderer.on("themeLoaded", function() {
 			updateSidebarTheme(editor);
 		});
 
+		updateLoadingStatus("Techedit.userlist");
 		firebase.database().ref("/f/" + fileId + "/users/").on("value", function(snapshot) {
 			resetUserlist();
 			var users = snapshot.val();
@@ -415,7 +569,6 @@
 				if (users.hasOwnProperty(key)) {
 					if (key != userdata.uid) {
 						if (users[key].color == null) {
-							console.log(1)
 							//user has been deleted
 							firebase.database().ref("/f/" + fileId + "/users/" + key).set(null);
 							continue;
@@ -433,6 +586,8 @@
 
 
 		});
+
+		updateLoadingStatus("Techedit.editor.language.change");
 		firebase.database().ref("/f/" + fileId + "/data/language/").on("value", function(snapshot) {
 			$("#lang-select").off("change", onLanguageChange);
 			var lang = snapshot.val();
@@ -442,13 +597,15 @@
 		});
 
 
-
+		updateLoadingStatus("Techedit.theme.select");
 		$("#theme-select").change(function() {
 			editor.setTheme("ace/theme/" + $("#theme-select").val());
 			setUserData(user, "editor.theme", $("#theme-select").val());
 			updateSidebarTheme(editor);
 
 		});
+
+		updateLoadingStatus("Techedit.user.username.change");
 		$("#userlist-currentuser-inputgroup").on("click", "#userlist-currentuser-input-confirm", function() {
 			var username = $("#userlist-currentuser-input").val();
 			setConfirmBoxVisible(false);
@@ -457,6 +614,7 @@
 			setDisplayName(userdata.uid, userDisplayName);
 			$("#userlist-light-currentuser-input").val(reverseStripUsername(userDisplayName));
 		});
+
 		$("#userlist-light-currentuser-input-confirm").click(function() {
 			var username = $("#userlist-light-currentuser-input").val();
 
@@ -467,7 +625,7 @@
 			$("#userlist-light-currentuser-input").val(reverseStripUsername(userDisplayName));
 
 		});
-		$("#userlist-currentuser-input").keyup(function() {
+		$("#userlist-currentuser-input").on("input", function() {
 
 			if (userDisplayName !== $(this).val()) {
 				setConfirmBoxVisible(true);
@@ -476,7 +634,7 @@
 			}
 		});
 
-		$("#userlist-light-currentuser-input").keyup(function() {
+		$("#userlist-light-currentuser-input").on("input", function() {
 			if (userDisplayName !== $(this).val()) {
 				$("#userlist-light-currentuser-input-confirm").attr("disabled", false);
 			} else {
@@ -485,9 +643,81 @@
 
 		});
 
+		$("#userlist-currentuser-input").keypress(function(e) {
+			if(e.which === 13) {
+
+				$("#userlist-currentuser-input-confirm").click();
+			}
+
+		});
+		$("#userlist-light-currentuser-input").keypress(function(e) {
+			if(e.which === 13) {
+
+				$("#userlist-light-currentuser-input-confirm").click();
+			}
+
+		});
+		updateLoadingStatus("Techedit.theme.filter.change");
+		$("#theme-select-popular-filter").change(function() {
+			if ($(this).is(':checked')) {
+				$(".theme-light-other, .theme-dark-other").addClass("hidden");
+			} else {
+				$(".theme-light-other, .theme-dark-other").removeClass("hidden");
+			}
+			$(".selectpicker").selectpicker("refresh");
+			updateSidebarTheme(editor);
+		});
+
+		updateLoadingStatus("Techedit.editor.printmargin.change");
+		$("#print-margin-checkbox").change(function() {
+			if ($(this).is(":checked")) {
+				editor.setShowPrintMargin(true);
+				setUserData(user, "editor.printMargin", $("#print-margin-length").val() || 80);
+				$("#print-margin-collapse").collapse("show");
+			} else {
+				editor.setShowPrintMargin(false);
+				setUserData(user, "editor.printMargin", -1);
+				$("#print-margin-collapse").collapse("hide");
+			}
+		});
+		$("#print-margin-length").on("input", function() {
+			var column = $("#print-margin-length").val();
+			if (column < 1) {
+				$("#print-margin-length").val(1);
+				return;
+			}
+			editor.setShowPrintMargin(true);
+			editor.setPrintMarginColumn(column);
+			setUserData(user, "editor.printMargin", column);
+
+		});
+		updateLoadingStatus("Techedit.editor.keymap.change");
+		$("#keymap-select").change(function() {
+			var keymap = $("#keymap-select").val();
+			editor.setKeyboardHandler("ace/keyboard/" + keymap);
+			setUserData(user, "editor.keymap", keymap);
+		});
+		updateLoadingStatus("Techedit.user.deleteData.change");
+		$("#delete-user-data").click(function() {
+			$("#settings-tab-user-main").addClass("hidden");
+			$("#settings-tab-user-confirm").removeClass("hidden");
+		});
+		$("#delete-user-data-cancel").click(function() {
+			$("#settings-tab-user-confirm").addClass("hidden");
+			$("#settings-tab-user-main").removeClass("hidden");
+		});
+		$("#delete-user-data-confirm").click(function() {
+			deleteAllCookies();
+			window.location.reload();
+
+		});
+
+
+		updateLoadingStatus("Techedit.ui");
+
 	}
 	function init(user, userdata) {
-
+		updateLoadingStatus("Techedit.js.init");
 		if (userdata.editor) {
 			//if userdata.editor.theme is undefined it will be caught at the if statement
 			theme = userdata.editor.theme;
@@ -501,17 +731,40 @@
 		setConfirmBoxVisible(false);
 		$("#userlist-light-currentuser-input-confirm").attr("disabled", "disabled");
 
+		updateLoadingStatus("Techedit.editor.theme");
 		editor.setTheme("ace/theme/" + theme);
-		$("#theme-select").selectpicker("val", theme);
+		$("#theme-select").selectpicker("val", theme)
+		;
+		updateLoadingStatus("Techedit.editor.language");
 		editor.getSession().setMode("ace/mode/text");
-		editor.setShowPrintMargin(false);
+
+		updateLoadingStatus("Techedit.editor.printMargin");
+
+		if (userdata.editor.printMargin > 0) {
+			editor.setShowPrintMargin(true);
+			editor.setPrintMarginColumn(parseInt(userdata.editor.printMargin, 10));
+
+			$("#print-margin-length").val(userdata.editor.printMargin);
+			$("#print-margin-checkbox").attr("checked", "checked");
+			$("#print-margin-collapse").collapse("show");
+		} else {
+			editor.setShowPrintMargin(false);
+		}
 
 
+		updateLoadingStatus("Techedit.editor.keymap");
+		if (userdata.editor.keymap && userdata.editor.keymap != "default") {
+			$("#keymap-select").selectpicker("val", userdata.editor.keymap);
+			editor.setKeyboardHandler("ace/keyboard/" + userdata.editor.keymap);
+		}
+
+		updateLoadingStatus("Techedit.settings.select");
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
 			$(".selectpicker").selectpicker("mobile");
 			$(".selectpicker").attr("data-mobile", "true");
 		}
 
+		updateLoadingStatus("Techedit.splitview");
 
 		var split = Split(["#editor-box", "#sidebar"],
 			{
@@ -524,22 +777,28 @@
 				sizes: [73, 27],
 			});
 
+
 		//check for sidebar resize
 		$(window).resize(onUserlistResize);
+
+
 		// Get Firebase Database reference.
 
+		updateLoadingStatus("Techedit.file.data");
 		var firepadRef = firebase.database().ref("/f/" + fileId);
 
 		firebase.database().ref("/f/" + fileId + "/data/").once("value").then(function(snapshot) {
 			var data = snapshot.val();
 			$("#lang-select").selectpicker("val", data.language);
 			$("#lang-select").on("change", onLanguageChange);
+			updateLoadingStatus("Techedit.sync.engine");
 			var firepad = Firepad.fromACE(firepadRef, editor, {
 				userId:userdata.uid,
 				color:userdata.color
 			});
 
 			firepad.on("ready", function() {
+				updateLoadingStatus("Techedit.final");
 				stopLoading();
 				onUserlistResize();
 
@@ -549,5 +808,7 @@
 	}
 
 </script>
+
+
 </body>
 </html>
