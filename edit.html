@@ -79,6 +79,12 @@
 		#chat-input {
 			resize:none;
 		}
+		#import-user-data-inputgroup .custom-file-label {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow:ellipsis;
+			padding-right:100px;
+		}
 	</style>
 </head>
 <body>
@@ -297,6 +303,21 @@
 									<p>
 										Because you are not logged in, your settings are saved on your browser as cookies.
 									</p>
+									<a class="btn btn-block btn-primary" download="techedit-localUserData.json" id="export-user-data">Export User Data</a>
+									<hr>
+									<h3>Danger Zone</h3>
+									<div class="input-group mb-3">
+										<div class="input-group-prepend">
+											<span class="input-group-text">Techedit User Data File</span>
+										</div>
+										<div class="custom-file" id="import-user-data-inputgroup">
+											<input type="file" class="custom-file-input" id="import-user-data-filepicker" aria-describedby="inputGroupFileAddon01">
+											<label class="custom-file-label" for="import-user-data-filepicker">Choose file</label>
+										</div>
+									</div>
+									<button class="btn btn-block btn-primary" id="import-user-data-btn">Import User Data</button>
+									<p class="text-muted">This action will replace all your settings with those in the new file.</p>
+									<hr>
 									<button class="btn btn-block btn-danger" id="delete-user-data">Delete All User Data</button>
 									<p class="text-muted">This action will delete all your settings for ALL techedit documents and
 									restore them to the defaults.</p>
@@ -305,12 +326,13 @@
 									<h2>Confirm deletion of ALL Data</h2>
 									<p>
 										Warning: This action is irreversible and will affect all Techedit Documents!<br>
-										Clicking the confirm button will delete all data, then reload the page.
+										Clicking the confirm button will <span id="settings-tab-user-confirm-actionspan">delete all data, then reload the page.</span>
 									</p>
 									<button class="btn btn-block btn-primary" id="delete-user-data-cancel">Cancel</button>
 									<button class="btn btn-block btn-danger" id="delete-user-data-confirm">I Understand, Reload This Page and Delete All My Data</button>
 
 								</div>
+
 							</div>
 						</div>
 					</div>
@@ -350,11 +372,8 @@
 </script>
 <script src="/js/techedit.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/edit-helpers.js" type="text/javascript" charset="utf-8"></script>
-
 <script>
 	updateLoadingStatus("Techedit.helper");
-
-
 	function updateSidebarTheme(editor, light) {
 
 		var themeColor = getComputedStyle(editor.renderer.scroller).backgroundColor;
@@ -396,11 +415,11 @@
 
 	}
 
-	function stopLoading() {
+	function hideLoadingText() {
 		$("#loader").addClass("hidden");
 		$("#split-wrapper").removeClass("hidden");
 	}
-	function startLoading() {
+	function showLoadingText() {
 		$("#loader").removeClass("hidden");
 		$("#split-wrapper").addClass("hidden");
 	}
@@ -415,6 +434,7 @@
 			author:userId,
 			displayName:userDisplayName
 		});
+
 	}
 	function addUserToUserlist(username, color) {
 		var html = `<li class="userlist-li userlist-addedbyjs"><div class="userlist-wrapper">` +
@@ -523,28 +543,7 @@
 		return username.substring(0, 64 * 6).replace(/</g, '&lt;').replace(/"/g, '&quot;');
 	}
 
-	//specifying a type will ensure that only one alert of that type ever exists. Newer alerts
-	//override old ones
-	function addAlert(message, strong, level, location, type) {
-		var fullTypeText = "";
-		if (type) {
-			$(".techedit-alert-type-" + type).remove();
-			fullTypeText = "techedit-alert-type-" + type;
-		}
-		var alertbox = "alertbox";
-		if (alertbox) {
-			alertbox = location + "-" + alertbox;
-		}
-		var level = level || "danger";
-		var html = `<div class="alert alert-${level} alert-dismissible fade show ${fullTypeText}" role="alert">` +
-					  	`<strong>${strong}</strong> ${message}` +
-					  	`<button type="button" class="close" data-dismiss="alert" aria-label="Close">` +
-							`<span aria-hidden="true">&times;</span>` +
-					  	`</button>`
-					`</div>`;
-		$("#" + alertbox).append(html);
 
-	}
 	function updateLoadingStatus(module) {
 		if (!this.loadList) this.loadList = [];
 		if (module) {
@@ -559,11 +558,12 @@
 	var editor;
 	var fileId = "test";
 	function load() {
-		startLoading();
+		showLoadingText();
 
 		updateLoadingStatus("Techedit.user");
 		$("#editor").html("");
-		if (editor != null && editor.destroy) {
+		let editorExists = editor != null && editor.destroy;
+		if (editorExists) {
 			editor.destroy();
 		}
 		editor = ace.edit("editor");
@@ -622,8 +622,9 @@
 			//https://stackoverflow.com/a/684692/5511561 (slightly adapted)
 			for (var key in users) {
 				if (users.hasOwnProperty(key)) {
-					if (key != userdata.uid) {
-						if (users[key].color == null) {
+					if (key !== userdata.uid) {
+						console.log(users[key].color)
+						if (users[key].color == undefined) {
 							//user has been deleted
 							firebase.database().ref("/f/" + fileId + "/users/" + key).set(null);
 							continue;
@@ -646,7 +647,8 @@
 		firebase.database().ref("/f/" + fileId + "/data/language/").on("value", function(snapshot) {
 			$("#lang-select").off("change", onLanguageChange);
 			var lang = snapshot.val();
-			$("#lang-select").selectpicker("val", lang);
+			$("#lang-select").val(lang);
+			$("#lang-select").selectpicker("refresh");
 			editor.getSession().setMode("ace/mode/" + lang);
 			$("#lang-select").on("change", onLanguageChange);
 		});
@@ -756,19 +758,40 @@
 		});
 		updateLoadingStatus("Techedit.user.deleteData.change");
 		$("#delete-user-data").click(function() {
+			$("#settings-tab-user-confirm-actionspan").text("delete all data, then reload the page.");
 			$("#settings-tab-user-main").addClass("hidden");
 			$("#settings-tab-user-confirm").removeClass("hidden");
+			$("#delete-user-data-confirm").off();
+			$("#delete-user-data-confirm").text("I Understand, Reload This Page and Delete All My Data");
+			$("#delete-user-data-confirm").click(function() {
+				deleteAllCookies();
+				window.location.reload();
+
+			});
 		});
 		$("#delete-user-data-cancel").click(function() {
 			$("#settings-tab-user-confirm").addClass("hidden");
 			$("#settings-tab-user-main").removeClass("hidden");
 		});
-		$("#delete-user-data-confirm").click(function() {
-			deleteAllCookies();
-			window.location.reload();
-
+		$("#settings-modal").on("hidden.bs.modal", function() {
+			$("#settings-tab-user-confirm").addClass("hidden");
+			$("#settings-tab-user-main").removeClass("hidden");
 		});
 
+		$("#import-user-data-btn").click(function() {
+			$("#settings-tab-user-confirm-actionspan").text("delete all data and replace " +
+				"it with the data from the file, then reload the page. If you select the wrong file or the file is corrupted, " +
+				"your settings will be set to the default settings!");
+			$("#settings-tab-user-confirm").removeClass("hidden");
+			$("#settings-tab-user-main").addClass("hidden");
+			$("#delete-user-data-confirm").off();
+			$("#delete-user-data-confirm").text("I Understand, Reload This Page and Update All My Data");
+			$("#delete-user-data-confirm").click(function() {
+
+				window.location.reload();
+
+			});
+		});
 		updateLoadingStatus("Techedit.chat");
 		firebase.database().ref("/f/" + fileId + "/chat/").on("child_added", function(snapshot) {
 			var message = snapshot.val();
@@ -778,7 +801,7 @@
 
 			console.log(message);
 			if (message.actionMsg != undefined && message.actionMsg) {
-				$("#chat-messages").append("<p><b>" + (message.displayName || ("user " + message.author)) + "</b>: <i>" + message.text + "</i></p>");
+				$("#chat-messages").append("<p><i><b>" + (message.displayName || ("user " + message.author)) + "</b>: " + message.text + "</i></p>");
 			} else {
 				$("#chat-messages").append("<p><b>" + (message.displayName || ("user " + message.author)) + "</b>: " + message.text + "</p>");
 			}
@@ -790,13 +813,19 @@
 		});
 		$("#chat-input").keyup(function(e) {
 			if(e.which === 13 && !e.shiftKey) {
+
 				$("#chat-button").click();
+
 			}
 		});
 		$("#chat-button").click(function() {
 			//TODO: allow markdown, account for xss
 			//TODO: Lazy load
-			var message = stripText($("#chat-input").val());
+			var message = stripText($("#chat-input").val()).replaceAll(" ", "");
+			console.log(message.replaceAll("\n", ""));
+			if (message.replaceAll("\n", "") === "") {
+				return;
+			}
 			$("#chat-input").val("");
 			firebase.database().ref("/f/" + fileId + "/chat/").push({
 				text:message,
@@ -806,6 +835,21 @@
 				actionMsg:false
 			});
 		});
+		updateLoadingStatus("Techedit.user.data")
+
+		//https://stackoverflow.com/a/30800715
+		var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(Cookies.get("techedit-anonymous-user-data"));
+		$("#export-user-data").attr("href", dataStr);
+		$("#export-user-data").attr("download", "techedit-localUserData" + userdata.uid + ".json");
+
+		$('#import-user-data-filepicker').on('change',function(){
+			//get the file name
+			var fileName = $(this).val();
+			fileName = fileName.substring(fileName.lastIndexOf("\\") + 1)
+			//replace the "Choose a file" label
+			$(this).next('.custom-file-label').css("white-space: nowrap;overflow:hidden;");
+			$(this).next('.custom-file-label').html(fileName);
+		})
 
 		updateLoadingStatus("Techedit.ui");
 
@@ -818,7 +862,7 @@
 		}
 		if (theme == undefined) {
 			theme = "monokai";
-			setConfirmBoxVisible(user, "editor.theme", theme);
+			setUserData(user, "editor.theme", theme);
 		}
 
 		userDisplayName = userdata.displayName;
@@ -829,7 +873,7 @@
 		editor.setTheme("ace/theme/" + theme);
 		$("#theme-select").selectpicker("val", theme);
 		updateLoadingStatus("Techedit.editor.language");
-		editor.getSession().setMode("ace/mode/text");
+		//editor.getSession().setMode("ace/mode/text");
 
 		updateLoadingStatus("Techedit.editor.printMargin");
 
@@ -846,33 +890,49 @@
 
 
 		updateLoadingStatus("Techedit.editor.keymap");
-		if (userdata.editor.keymap && userdata.editor.keymap != "default") {
+		if (userdata.editor.keymap != null && userdata.editor.keymap !== "default") {
 			$("#keymap-select").selectpicker("val", userdata.editor.keymap);
 			editor.setKeyboardHandler("ace/keyboard/" + userdata.editor.keymap);
 		}
 
-		updateLoadingStatus("Techedit.settings.select");
-		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
-			$(".selectpicker").selectpicker("mobile");
-			$(".selectpicker").attr("data-mobile", "true");
-		}
+
 
 		updateLoadingStatus("Techedit.splitview");
 
-		var split = Split(["#editor-box", "#sidebar"],
-			{
-				onDragEnd:function() {
-					editor.resize();
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+			$(".selectpicker").selectpicker("mobile");
+			$(".selectpicker").attr("data-mobile", "true");
 
-				},
-				onDrag:onUserlistResize,
-				minSize:[0,0],
-				sizes: [73, 27],
-			});
+			var split = Split(["#editor-box", "#sidebar"],
+				{
+					onDragEnd:function() {
+						editor.resize();
+
+					},
+					onDrag:onUserlistResize,
+					minSize:[0,0],
+					gutterSize:30,
+					sizes: [100, 0],
+				});
+
+		} else {
+			var split = Split(["#editor-box", "#sidebar"],
+				{
+					onDragEnd:function() {
+						editor.resize();
+
+					},
+					onDrag:onUserlistResize,
+					minSize:[0,0],
+					sizes: [73, 27],
+				});
+		}
 
 
 		//check for sidebar resize
 		$(window).resize(onUserlistResize);
+
+
 
 
 		// Get Firebase Database reference.
@@ -882,7 +942,9 @@
 
 		firebase.database().ref("/f/" + fileId + "/data/").once("value").then(function(snapshot) {
 			var data = snapshot.val();
-			$("#lang-select").selectpicker("val", data.language);
+			$("#lang-select").off("change", onLanguageChange);
+			$("#lang-select").val(data.language);
+			$("#lang-select").selectpicker("refresh");
 			$("#lang-select").on("change", onLanguageChange);
 			updateLoadingStatus("Techedit.sync.engine");
 			var firepad = Firepad.fromACE(firepadRef, editor, {
@@ -892,7 +954,7 @@
 
 			firepad.on("ready", function() {
 				updateLoadingStatus("Techedit.final");
-				stopLoading();
+				hideLoadingText();
 
 				onUserlistResize();
 
