@@ -6,7 +6,8 @@ label {
 	display:none;
 }
 
-header.masthead {
+header.masthead,
+.call-to-action {
 	background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
 }
 

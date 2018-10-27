@@ -122,6 +122,14 @@
 	</div>
 	<p id="loader-module-wrapper" class="">Loading <span id="loader-module">Techedit.resources</span></p>
 </div>
+<div id="notfounderror-wrapper" class="container hidden">
+	<div class="col-lg-12 pt-3">
+		<h1>404 Error: File not found</h1>
+		<p>No public resource was found at this location. Either the page no longer exists, or you do not have permission to view it.</p>
+		<br>
+		<span class="lo-text">Do you need to <a class="li-link" href="#">Log In</a>?</span>
+	</div>
+</div>
 <div id="split-wrapper" class="hidden">
 	<div id="editor-box" class="split">
 		<div id="editor"></div>
@@ -537,6 +545,9 @@
 		return text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
 
 	}
+	function stripId(id) {
+	 	return id.replace(new RegExp("[\\[\\]\\\\\\/\\$#\\.]", 'g'), "");
+	}
 	function safeStripUsername(username) {
 		//this can be used to strip a username that should already be stripped
 		//if the username has all quotes then it each quote could potentially end up being 6 characters.
@@ -556,10 +567,30 @@
 </script>
 <script>
 	var editor;
-	var fileId = "test";
-	function load() {
-		showLoadingText();
+	var path = window.location.pathname.substring(1).split("/");
+	if (path[0] == "f") {
+		fileId = path[1];
+	} else if (path[0].substring(0,4) == "edit") {//for localhost
+		fileId = getQuery("id");
+	}
 
+	// check if document exists
+	// strip id will remove characters that cause firebase to throw an error, and also slashes.
+	// if the id is valid strip id will not change the id, if the id is invalid then no file can
+	// possible exist with that id and firebase will return null, so we shoe 404 as expected.
+	firebase.database().ref("/f/" + stripId(fileId) + "/createdOn/").once("value").then(function(snapshot) {
+		if (snapshot.val() != null) {
+			load();
+		} else {
+			//show 404
+			$("#loader").addClass("hidden");
+			$("#notfounderror-wrapper").removeClass("hidden");
+		}
+	});
+
+	function load() {
+		$("#notfounderror-wrapper").addClass("hidden");
+		showLoadingText();
 		updateLoadingStatus("Techedit.user");
 		$("#editor").html("");
 		let editorExists = editor != null && editor.destroy;
@@ -567,7 +598,6 @@
 			editor.destroy();
 		}
 		editor = ace.edit("editor");
-		fileId = "test";
 		firebase.auth().onAuthStateChanged(function (user) {
 			if (user) {
 				updateLoadingStatus("Techedit.user.profile");
@@ -599,7 +629,7 @@
 			}
 		});
 	}
-	load();
+
 	var theme;
 	var userDisplayName;
 	var userId;
@@ -647,6 +677,10 @@
 		firebase.database().ref("/f/" + fileId + "/data/language/").on("value", function(snapshot) {
 			$("#lang-select").off("change", onLanguageChange);
 			var lang = snapshot.val();
+			if (lang == null) {
+				lang = "text";
+				firebase.database().ref("/f/" + fileId + "/data/language/").set("text");
+			}
 			$("#lang-select").val(lang);
 			$("#lang-select").selectpicker("refresh");
 			editor.getSession().setMode("ace/mode/" + lang);
@@ -776,8 +810,15 @@
 		$("#settings-modal").on("hidden.bs.modal", function() {
 			$("#settings-tab-user-confirm").addClass("hidden");
 			$("#settings-tab-user-main").removeClass("hidden");
+			window.location.href = "#";
 		});
-
+		$("#settings-modal").on("shown.bs.modal", function() {
+			window.location.href = "#settings-main";
+		});
+		$("#settings-modal a[data-toggle='tab']").on('shown.bs.tab', function (e) {
+			console.log(e.target);
+			window.location.href = "#settings-" + e.target;
+		});
 		$("#import-user-data-btn").click(function() {
 			$("#settings-tab-user-confirm-actionspan").text("delete all data and replace " +
 				"it with the data from the file, then reload the page. If you select the wrong file or the file is corrupted, " +
@@ -821,11 +862,9 @@
 		$("#chat-button").click(function() {
 			//TODO: allow markdown, account for xss
 			//TODO: Lazy load
-			var message = stripText($("#chat-input").val()).replaceAll(" ", "");
-			console.log(message.replaceAll("\n", ""));
-			if (message.replaceAll("\n", "") === "") {
-				return;
-			}
+			var message = stripText($("#chat-input").val());
+			var messageStripped = message.replaceAll(" ", "");
+
 			$("#chat-input").val("");
 			firebase.database().ref("/f/" + fileId + "/chat/").push({
 				text:message,
@@ -942,6 +981,13 @@
 
 		firebase.database().ref("/f/" + fileId + "/data/").once("value").then(function(snapshot) {
 			var data = snapshot.val();
+			if (!data) {
+				data = {};
+			}
+			if (!data.language) {
+				data.language = "text";
+				firebase.database().ref("/f/" + fileId + "/data/language/").set(data.language);
+			}
 			$("#lang-select").off("change", onLanguageChange);
 			$("#lang-select").val(data.language);
 			$("#lang-select").selectpicker("refresh");
