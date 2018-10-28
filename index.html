@@ -213,14 +213,14 @@
 <script>
 	var metaKeyPressed = false;
 	var pasted = false;
-	Mousetrap.bind(['command', 'ctrl'], function() {
+	Mousetrap.bind(["command", "ctrl"], function() {
 		$("#paste").removeClass("invisible");
 		$("#paste").focus();
 		metaKeyPressed = true;
 
 
 	}, "keydown");
-	Mousetrap.bind(['command', 'ctrl'], function() {
+	Mousetrap.bind(["command", "ctrl"], function() {
 		$("#paste").val("").blur().addClass("invisible");
 		metaKeyPressed = false;
 
@@ -230,15 +230,25 @@
 	Mousetrap.bind(['command', 'ctrl', "v"], function() {
 
 		if (metaKeyPressed) {
-			console.log($("#paste").val());
-			$("#paste").val("").blur().addClass("invisible");
-			metaKeyPressed = false;
-			var pasted = true;
+			var value = $("#paste").val();
+			if (value != "") {
+			console.log(value);
+				$("#paste").blur().addClass("invisible");
+				localStorage.setItem("techedit-paste-to-create-data", btoa(value));
+				metaKeyPressed = false;
+				var pasted = true;
+				window.location.href = "/new.html";
+			}
 		}
 
 
 
 	}, "keyup");
+	Mousetrap.bind("N", function() {
+
+		window.location.href = "/new.html";
+
+	});
 </script>
 </body>
 </html>

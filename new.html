@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+	<meta content="" name="description">
+	<meta content="Jeffrey Meng" name="author">
+	<title>Techedit</title>
+
+	<!-- Favicons -->
+
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="/favicon/apple-touch-icon-57x57.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/favicon/apple-touch-icon-114x114.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/favicon/apple-touch-icon-72x72.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicon/apple-touch-icon-144x144.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="60x60" href="/favicon/apple-touch-icon-60x60.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/favicon/apple-touch-icon-120x120.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="76x76" href="/favicon/apple-touch-icon-76x76.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/favicon/apple-touch-icon-152x152.png" />
+	<link rel="icon" type="image/png" href="/favicon/favicon-196x196.png" sizes="196x196" />
+	<link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+	<link rel="icon" type="image/png" href="/favicon/favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="/favicon/favicon-16x16.png" sizes="16x16" />
+	<link rel="icon" type="image/png" href="/favicon/favicon-128.png" sizes="128x128" />
+	<meta name="application-name" content="&nbsp;" />
+	<meta name="msapplication-TileColor" content="#FFFFFF" />
+	<meta name="msapplication-TileImage" content="/favicon/mstile-144x144.png" />
+	<meta name="msapplication-square70x70logo" content="/favicon/mstile-70x70.png" />
+	<meta name="msapplication-square150x150logo" content="/favicon/mstile-150x150.png" />
+	<meta name="msapplication-wide310x150logo" content="/favicon/mstile-310x150.png" />
+	<meta name="msapplication-square310x310logo" content="/favicon/mstile-310x310.png" />
+
+	<!-- Bootstrap core CSS -->
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+
+	<link href="/css/techedit.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+	<a class="navbar-brand" href="/">Techedit</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-toggle" aria-controls="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="nav-toggle">
+
+		<span class="navbar-text mx-3">Go to:</span>
+
+		<div class="form-inline mr-auto my-2 my-lg-0">
+			<input class="form-control" type="text" placeholder="Existing File ID" id="nav-file-id" tabindex="2">
+			<button class="btn btn-secondary" id="nav-file-id-btn">Go!</button>
+		</div>
+		<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+			<li class="nav-item">
+				<a class="nav-link" href="#">New File</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" href="#">Sign in</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+<div id="loader" class="text-center">
+	<div class="spinner">
+		<div class="bounce1"></div>
+		<div class="bounce2"></div>
+		<div class="bounce3"></div>
+	</div>
+	<p id="loader-module-wrapper" class="">Loading <span id="loader-module">Techedit.file.create</span></p>
+</div>
+
+<div class="container hidden" id="error">
+	<div class="col-lg-12 pt-3">
+		<h1>500 Internal Server Error</h1>
+		<p>The action requested could not be completed at this time. Please try again later.</p>
+		<p><a href="/">Return to home page</a> or <a id="reload">Reload this page</a></p>
+
+	</div>
+</div>
+
+<!-- Bootstrap core JavaScript -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/techedit.js"></script>
+<script src="/js/underscore.min.js"></script>
+<script src="/js/lang-detector.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-database.js"></script>
+
+<script>
+	// Initialize Firebase
+	var config = {
+		apiKey: "AIzaSyABAa5dEDjLd46i01STVlapvKrFFMinTqo",
+		authDomain: "techedit-io.firebaseapp.com",
+		databaseURL: "https://techedit-io.firebaseio.com",
+		projectId: "techedit-io",
+		storageBucket: "techedit-io.appspot.com",
+		messagingSenderId: "84859966897"
+	};
+	firebase.initializeApp(config);
+</script>
+<script>
+	/* global $ firebase localStorage */
+
+	//generate a random 6 digit alphanumeric file ID that is not already taken.
+	function getFileID(callback, count) {
+		if (!count) {
+			count = 0;
+		}
+		//If we generate more than 100 Id's and all of them are taken, there is probably an error.
+		if (count > 100) {
+			callback(false);
+		}
+		else {
+			// Because Capital I, lowercase l, capital O, and zero(0) look the same in some URL bars, we
+			// don't generate any file Id's with these characters.
+			var chars = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+			var result = "";
+			for (var i = 6; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+			//var invalid = true;
+			firebase.database().ref("/f/" + result + "/createdOn/").once("value").then(function(snapshot) {
+				if (snapshot.val() === null) {
+					callback(result);
+				}
+				else {
+					getFileID(callback, count + 1);
+				}
+			});
+		}
+	}
+	getFileID(function(key) {
+		if (!key) {
+			$("#loader").addClass("hidden");
+			$("#error").removeClass("hidden");
+		}
+		else {
+			var now = new Date().getTime();
+			var text = localStorage.getItem("techedit-paste-to-create-data");
+			if (text != null) {
+				var initialData = text;//still encoded
+				text = atob(text);
+				console.log(key);
+				console.log(text);
+				localStorage.removeItem("techedit-paste-to-create-data");
+				var language = detectLang(text).toLowerCase();
+				if (language == "unknown") {
+					language = "text";
+				}
+			} else {
+				console.log(null);
+				var language = "text";
+				var initialData = null;
+			}
+
+			firebase.database().ref("/f/" + key + "/createdOn").set(now).then(function() {
+				firebase.database().ref("/f/" + key + "/data/").set({
+					language: language,
+					name: "Untitled File",
+					initialization:{
+						text:initialData
+					}
+				}).then(function() {
+					window.location.href = "/edit.html?id=" + key;
+				});
+			});
+		}
+	});
+
+	$("#reload").click(function() {
+		window.location.reload();
+	});
+</script>
+
+</body>
+</html>

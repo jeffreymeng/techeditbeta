@@ -993,9 +993,15 @@
 			$("#lang-select").selectpicker("refresh");
 			$("#lang-select").on("change", onLanguageChange);
 			updateLoadingStatus("Techedit.sync.engine");
+			var initialText = null;
+			if (data.initialization != undefined) {
+				initialText = atob(data.initialization.text);
+				firebase.database().ref("/f/" + fileId + "/data/initialization/").set(null);
+			}
 			var firepad = Firepad.fromACE(firepadRef, editor, {
 				userId:userdata.uid,
-				color:userdata.color
+				color:userdata.color,
+				defaultText:initialText
 			});
 
 			firepad.on("ready", function() {
