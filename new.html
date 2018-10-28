@@ -53,6 +53,7 @@
 		</div>
 		<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
 			<li class="nav-item">
+				<!-- Put a # here so when the user clicks the new file link the current new file is still created.-->
 				<a class="nav-link" href="#">New File</a>
 			</li>
 
@@ -82,7 +83,7 @@
 
 <!-- Bootstrap core JavaScript -->
 <script src="/js/jquery.min.js"></script>
-<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js" defer></script>
 <script src="/js/techedit.js"></script>
 <script src="/js/underscore.min.js"></script>
 <script src="/js/lang-detector.js"></script>
@@ -140,26 +141,29 @@
 		else {
 			var now = new Date().getTime();
 			var text = localStorage.getItem("techedit-paste-to-create-data");
+			var initialData;
+			var language;
 			if (text != null) {
-				var initialData = text;//still encoded
+				initialData = text;//still encoded
 				text = atob(text);
-				console.log(key);
-				console.log(text);
 				localStorage.removeItem("techedit-paste-to-create-data");
-				var language = detectLang(text).toLowerCase();
-				if (language == "unknown") {
-					language = "text";
+				if (getQuery("language") !== "" && getQuery("language") != null) {
+					language = getQuery("language");
+				} else {
+					var language = detectLang(text).toLowerCase();
+					if (language == "unknown") {
+						language = "text";
+					}
 				}
 			} else {
-				console.log(null);
-				var language = "text";
-				var initialData = null;
+				 language = getQuery("language") !== "" && getQuery("language") != null ? getQuery("language") : "text";
+				 initialData = null;
 			}
 
 			firebase.database().ref("/f/" + key + "/createdOn").set(now).then(function() {
 				firebase.database().ref("/f/" + key + "/data/").set({
 					language: language,
-					name: "Untitled File",
+					name: getQuery("name") || "Untitled File",
 					initialization:{
 						text:initialData
 					}
@@ -170,9 +174,7 @@
 		}
 	});
 
-	$("#reload").click(function() {
-		window.location.reload();
-	});
+	$("#reload").attr("href", window.location.href);
 </script>
 
 </body>
