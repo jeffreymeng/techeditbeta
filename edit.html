@@ -429,19 +429,19 @@
 	}
 	function showLoadingText() {
 		$("#loader").removeClass("hidden");
-		$("#split-wrapper").addClass("hidden");
+		$("#split-wrapper").addCass("hidden");
 	}
 	function onLanguageChange() {
 		var oldMode = editor.getSession().getMode().$id.substring("ace/mode/".length);
 		editor.getSession().setMode("ace/mode/" + $("#lang-select").val());
-		firebase.database().ref("/f/test/data/language/").set($("#lang-select").val());
+		firebase.database().ref("/f/" + fileId + "/data/language/").set($("#lang-select").val());
 		firebase.database().ref("/f/" + fileId + "/chat/").push({
 			text:"Changed the language from " + oldMode + " to " + $("#lang-select").val(),
 			actionMsg:true,
 			timestamp:new Date().getTime(),
 			author:userId,
 			displayName:userDisplayName
-		});
+		});l
 
 	}
 	function addUserToUserlist(username, color) {
@@ -517,13 +517,15 @@
 
 
 		firebase.database().ref("/f/" +fileId + "/users/" + userId + "/displayName/").set(userDisplayName);
-		firebase.database().ref("/f/" + fileId + "/chat/").push({
-			text:"Changed username from " + oldDisplayName + " to " + userDisplayName,
-			actionMsg:true,
-			timestamp:new Date().getTime(),
-			author:userId,
-			displayName:userDisplayName
-		});
+		if (oldDisplayName !== false) {
+			firebase.database().ref("/f/" + fileId + "/chat/").push({
+				text: "Changed username from " + oldDisplayName + " to " + userDisplayName,
+				actionMsg: true,
+				timestamp: new Date().getTime(),
+				author: userId,
+				displayName: userDisplayName
+			});
+		}
 	}
 	function stripUsername(username) {
 
@@ -660,7 +662,8 @@
 							continue;
 						}
 						addUserToUserlist(safeStripUsername(users[key].displayName || key), users[key].color);
-
+						// add the initial displayname to firebase
+						setDisplayName(userdata.uid, userDisplayName, false);
 					} else {
 
 						$("#userlist-currentuser-input").val(reverseStripUsername(userDisplayName));
@@ -828,27 +831,39 @@
 			$("#delete-user-data-confirm").off();
 			$("#delete-user-data-confirm").text("I Understand, Reload This Page and Update All My Data");
 			$("#delete-user-data-confirm").click(function() {
+				var file = $("#import-user-data-filepicker")[0].files[0];
+				var reader = new FileReader();
+				console.log(file);
+				reader.onload = function(e) {
+					var text = e.target.result;
+					console.log(text);
+					console.log(JSON.parse(text))
+				};
+				var text = reader.readAsText(file);
 
-				window.location.reload();
+				//window.location.reload();
 
 			});
 		});
 		updateLoadingStatus("Techedit.chat");
-		firebase.database().ref("/f/" + fileId + "/chat/").on("child_added", function(snapshot) {
+		firebase.database().ref("/f/" + fileId + "/chat/").limitToLast(50).on("child_added", function(snapshot) {
 			var message = snapshot.val();
 			if (!($("#chat-loading").hasClass("hidden"))) {
 				$("#chat-loading").addClass("hidden");
 			}
 
-			console.log(message);
+			// if user is scrolled within 10px of the bottom.
+			var scroll = ($('#chat-messages')[0].scrollHeight - $('#chat-messages').scrollTop() - 10 <= $('#chat-messages').outerHeight());
+
 			if (message.actionMsg != undefined && message.actionMsg) {
 				$("#chat-messages").append("<p><i><b>" + (message.displayName || ("user " + message.author)) + "</b>: " + message.text + "</i></p>");
 			} else {
 				$("#chat-messages").append("<p><b>" + (message.displayName || ("user " + message.author)) + "</b>: " + message.text + "</p>");
 			}
 
-			$('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
-
+			if (scroll) {
+				$('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+			}
 
 
 		});
@@ -888,7 +903,7 @@
 			//replace the "Choose a file" label
 			$(this).next('.custom-file-label').css("white-space: nowrap;overflow:hidden;");
 			$(this).next('.custom-file-label').html(fileName);
-		})
+		});
 
 		updateLoadingStatus("Techedit.ui");
 
