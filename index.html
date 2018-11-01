@@ -203,52 +203,12 @@
 	</div>
 </footer>
 <!-- Bootstrap core JavaScript -->
-<script src="/js/jquery.min.js">
+<script src="/lib/jquery.min.js">
 </script>
-<script src="/js/bootstrap.bundle.min.js">
+<script src="/lib/bootstrap.bundle.min.js">
 </script>
-<script src="/js/techedit.js" type="text/javascript" charset="utf-8"></script>
-<script src="/js/mousetrap.min.js" type="text/javascript" charset="utf-8"></script>
-
-<script>
-	var metaKeyPressed = false;
-	var pasted = false;
-	Mousetrap.bind(["command", "ctrl"], function() {
-		$("#paste").removeClass("invisible");
-		$("#paste").focus();
-		metaKeyPressed = true;
-
-
-	}, "keydown");
-	Mousetrap.bind(["command", "ctrl"], function() {
-		$("#paste").val("").blur().addClass("invisible");
-		metaKeyPressed = false;
-
-
-	}, "keyup");
-
-	Mousetrap.bind(['command', 'ctrl', "v"], function() {
-
-		if (metaKeyPressed) {
-			var value = $("#paste").val();
-			if (value != "") {
-			console.log(value);
-				$("#paste").blur().addClass("invisible");
-				localStorage.setItem("techedit-paste-to-create-data", btoa(value));
-				metaKeyPressed = false;
-				var pasted = true;
-				window.location.href = "/new.html";
-			}
-		}
-
-
-
-	}, "keyup");
-	Mousetrap.bind("n", function() {
-
-		window.location.href = "/new.html";
-
-	});
-</script>
+<script src="/lib/techedit.js" type="text/javascript" charset="utf-8"></script>
+<script src="/lib/mousetrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/scripts/index/main.js"></script>
 </body>
 </html>
