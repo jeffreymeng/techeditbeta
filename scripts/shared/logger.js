@@ -166,21 +166,21 @@ let logger = (function(console){
 		}
 	}
 
-	logger.logHistory = function(timestampStart, timestampEnd, filter) {
+	logger.logHistory = function(start, end, filter) {
 		if (filter === undefined || filter === null) {
-			if (isObject(timestampStart)) {
-				filter = timestampStart;
-			} else if (typeof timestampStart === "function") {
+			if (isObject(start)) {
+				filter = start;
+			} else if (typeof start === "function") {
 				let filter = {
-					filterFunction:timestampStart
+					filterFunction:start
 				}
-			} else if (isObject(timestampEnd)) {
-				filter = timestampEnd;
-				filter.start = timestampStart;
+			} else if (isObject(end)) {
+				filter = end;
+				filter.start = start;
 			} else {
 				filter = {
-					start:timestampStart,
-					end:timestampEnd
+					start:start,
+					end:end
 				}
 			}
 		}
@@ -191,32 +191,28 @@ let logger = (function(console){
 			if (filter.logged && filter.logged !== element.logged) continue;
 			if (filter.type && filter.type !== element.type) continue;
 			if (filter.filterFunction && !filter.filterFunction(element)) continue;
+
 			console[element.type].apply(this, element.content);
 		}
 	}
-	logger.getHistory = function(timestampStart, timestampEnd) {
-		if (!timestampStart && !timestampEnd) {
+	logger.getHistory = function(start, end) {
+		if (!start && !end) {
 			return logger.history;
 		}
 
-		if (timestampStart > timestampEnd) {
-			let temp = timestampEnd;
-			timestampEnd = timestampStart;
-			timestampStart = temp;
+		if (start > end) {
+			let temp = end;
+			end = start;
+			start = temp;
 
 		}
-		let compareFn = function(a, b) {
-			if (a.timestamp > b.timestamp) {
-				return 1
-			} else if (a.timestamp < b.timestamp) {
-				return -1;
-			} else {
-				return 0;
-			}
+		if (!start || start < 0) {
+			start = 0;
 		}
-		//if one is null but the other is not the case will be handled in search.
-		let start = search(history, timestampStart, compareFn);
-		let end = search(history, timestampEnd, compareFn, start);
+		if (!end || end > history.length - 1) {
+			end = history.length - 1;
+		}
+
 		return history.slice(start, end);
 
 	}
