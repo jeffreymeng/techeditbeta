@@ -429,7 +429,7 @@
 	}
 	function showLoadingText() {
 		$("#loader").removeClass("hidden");
-		$("#split-wrapper").addCass("hidden");
+		$("#split-wrapper").addClass("hidden");
 	}
 	function onLanguageChange() {
 		var oldMode = editor.getSession().getMode().$id.substring("ace/mode/".length);
