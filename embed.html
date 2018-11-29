@@ -232,32 +232,10 @@
 	}
 
 
-	function updateLoadingStatus(module) {
-		if (!this.loadList) this.loadList = [];
-		if (module) {
-			$("#loader-module").html(module);
-			this.loadList.push(module);
-		}
 
-		return this.loadList;
-	}
 </script>
 <script>
-	class Techedit {
-		constructor(divs) {
 
-		}
-	}
-	(function() {
-		let techedit = {
-			loader: {
-				container: "#loader"
-			},
-			editor:{
-				container:""
-			}
-		}
-	})()
 	var editor;
 	var path = window.location.pathname.substring(1).split("/");
 	fileId = path[1];
@@ -352,7 +330,6 @@
 
 	}
 	function init(user, userdata) {
-		updateLoadingStatus("Techedit.js.init");
 		if (userdata.editor) {
 			//if userdata.editor.theme is undefined it will be caught at the if statement
 			theme = userdata.editor.theme;
