@@ -260,11 +260,7 @@
 	})()
 	var editor;
 	var path = window.location.pathname.substring(1).split("/");
-	if (path[0] == "f") {
-		fileId = path[1];
-	} else if (path[0].substring(0,5) == "embed") {//for localhost
-		fileId = getQuery("id");
-	}
+	fileId = path[1];
 
 	// check if document exists
 	// strip id will remove characters that cause firebase to throw an error, and also slashes.
