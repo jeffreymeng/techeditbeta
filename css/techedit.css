@@ -26,6 +26,7 @@ header.masthead,
 #nav-file-id::-ms-input-placeholder { /* Microsoft Edge */
 	color: white;
 }
+
 #nav-file-id {
 	width:300px;
 
@@ -67,6 +68,31 @@ header.masthead,
 
 
 }
+
+/* input-dark */
+.input-dark {
+	background-color: #a1a1a1;
+	color:#EEEEEE;
+	border: 1px solid #414345;
+}
+.input-dark:focus {
+	background-color: #a1a1a1;
+	color:#EEEEEE;
+	border-color: #414345;
+}
+.input-dark::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	color: white;
+	opacity: 1; /* Firefox */
+}
+
+.input-dark:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	color: white;
+}
+
+.input-dark::-ms-input-placeholder { /* Microsoft Edge */
+	color: white;
+}
+
 /* loader: http://tobiasahlin.com/spinkit/ */
 .spinner {
 	margin: 100px auto 0;

@@ -39,28 +39,6 @@
 
 	<link href="/css/bootstrap-select.css" rel="stylesheet">
 
-	<!-- cookie consent -->
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
-	<script>
-		window.addEventListener("load", function(){
-			window.cookieconsent.initialise({
-				"palette": {
-					"popup": {
-						"background": "#000"
-					},
-					"button": {
-						"background": "#f1d600"
-					}
-				},
-				"position": "bottom-right",
-				"content": {
-					"message": "Techedit uses cookies to ensure you get the best experience on our website.",
-					"link": "Learn more about cookies"
-				}
-			})});
-	</script>
-
 
 	<link href="/css/techedit.css" rel="stylesheet">
 	<link href="/css/editor.css" rel="stylesheet">
@@ -389,23 +367,30 @@
 		//convert to int array [r, g, b]
 		themeColor = themeColor.replace(/[^\d,]/g, '').split(',');
 
-		var textColor;
+		var textColor, gutterColor;
 		var r = themeColor[0];
 		var g = themeColor[1];
 		var b = themeColor[2];
+
+		const inputSelector = "input.form-control, textarea.form-control";
 
 		if ((!light && light != null) || getBrightness(r, g, b) < 123) {
 
 			textColor = "#ced4da";
 			gutterColor = "#6c757d";
+
 			$('.selectpicker').selectpicker("setStyle", "btn-light", "remove");
 			$('.selectpicker').selectpicker("setStyle", "btn-secondary", "add");
+
+			$(inputSelector).addClass("input-dark");
 		} else {
 			textColor = "#000000";
 			gutterColor = "#EEEEEE";
-			chatColor = "#d9d9d9";
+
 			$('.selectpicker').selectpicker("setStyle", "btn-secondary", "remove");
 			$('.selectpicker').selectpicker("setStyle", "btn-light", "add");
+
+			$(inputSelector).removeClass("input-dark");
 
 		}
 		var backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
@@ -417,7 +402,6 @@
 		$("#sidebar").css("background-color", backgroundColor);
 		$("#sidebar").css("color", textColor);
 		$(".gutter").css("background-color", gutterColor);
-		$("#chat-messages").css("background-color", "rgba(" + r + ", " + g + ", " + b + ", 0.9)");
 
 
 
@@ -509,7 +493,7 @@
 			} else {
 				setObjectValueByString(path, data, value);
 			}
-			Cookies.set("techedit-anonymous-user-data", data, {expires:1});
+			Cookies.set("techedit-anonymous-user-data", data, {expires:365});
 
 		}
 	}
@@ -852,7 +836,9 @@
 				reader.onload = function(e) {
 					var text = e.target.result;
 					console.log(text);
-					console.log(JSON.parse(text))
+					console.log(JSON.parse(text));
+					Cookies.set("techedit-anonymous-user-data", text, {expires:365});
+					window.location.reload();
 				};
 				var text = reader.readAsText(file);
 
