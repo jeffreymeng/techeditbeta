@@ -10,7 +10,11 @@
 	  "rewrites": [ {
 		"source": "/f/**",
 		"destination": "/edit.html"
-	  } ],
+	  },
+		{
+		  "source": "/embed/**",
+		  "destination": "/embed.html"
+		}],
 	  "cleanUrls": true,
 	  "trailingSlash": true
 

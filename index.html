@@ -63,7 +63,7 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	<a class="navbar-brand" href="/">Techedit</a>
+	<a class="navbar-brand" href="/" tabindex="1">Techedit</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-toggle" aria-controls="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -81,9 +81,6 @@
 				<a class="nav-link" href="/new/">New File</a>
 			</li>
 
-			<li class="nav-item">
-				<a class="nav-link" href="#">Sign in</a>
-			</li>
 		</ul>
 	</div>
 </nav>
@@ -98,11 +95,9 @@
 			</div>
 			<div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
 				<div class="form-row">
-					<div class="col-12 col-md-9 mb-2 mb-md-0">
-						<input class="form-control form-control-lg" placeholder="File name and extension (e.g. index.html)" type="text">
-					</div>
-					<div class="col-12 col-md-3">
-						<button class="btn btn-block btn-lg btn-primary" type="submit">Create File!</button>
+
+					<div class="col-12 col-md-12">
+						<a href="/new/" class="btn btn-block btn-lg btn-primary" role="button">Create File!</a>
 					</div>
 				</div>
 			</div>
@@ -136,7 +131,7 @@
 						<i class="icon-check m-auto text-primary"></i>
 					</div>
 					<h3>Full Featured</h3>
-					<p class="lead mb-0">With a free account, you can create private documents, render html files, and save powerful editor preferences.</p>
+					<p class="lead mb-0">A powerful editor utilizes your unique coding preferences and keeps them separate from any shared documents.</p>
 				</div>
 			</div>
 		</div>
@@ -154,16 +149,16 @@
 			<div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
 				<form>
 					<div class="form-row">
-						<div class="col-12 col-md-9 mb-2 mb-md-0">
-							<input type="email" class="form-control form-control-lg" placeholder="File Name">
+
+						<div class="col-12 col-md-12">
+							<a href="/new/" class="btn btn-block btn-lg btn-primary" role="button">Create File!</a>
 						</div>
 
-						<div class="col-12 col-md-3">
-							<button type="submit" class="btn btn-block btn-lg btn-primary">Create File!</button>
-						</div>
-
-						<h5 class="pt-2">You can also press N anywhere on this page to create a new file.<br>
-							Pasting anywhere (other than a text box) will create a new file with the text in your clipboard.</h5>
+						<h5 class="pt-2 display-block">
+							<kbd>n</kbd>: New empty file
+							<br><br>
+							<kbd><kbd class="ctrl-cmd">ctrl</kbd> + <kbd>v</kbd></kbd>: New file from clipboard
+						</h5>
 						<div id="paste-container">
 							<textarea id="paste" class="invisible mousetrap"></textarea>
 						</div>
@@ -173,35 +168,6 @@
 		</div>
 	</div>
 </section>
-
-<!-- Footer -->
-<footer class="footer bg-light">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-6 h-100 text-center text-lg-left my-auto">
-				<ul class="list-inline mb-2">
-					<li class="list-inline-item">
-						<a href="#">About</a>
-					</li>
-					<li class="list-inline-item">&sdot;</li>
-					<li class="list-inline-item">
-						<a href="#">Contact</a>
-					</li>
-					<li class="list-inline-item">&sdot;</li>
-					<li class="list-inline-item">
-						<a href="#">Terms of Use</a>
-					</li>
-					<li class="list-inline-item">&sdot;</li>
-					<li class="list-inline-item">
-						<a href="#">Privacy Policy</a>
-					</li>
-				</ul>
-				<p class="text-muted small mb-4 mb-lg-0">&copy; Jeffrey Meng 2018.</p>
-			</div>
-
-		</div>
-	</div>
-</footer>
 <!-- Bootstrap core JavaScript -->
 <script src="/js/jquery.min.js">
 </script>
@@ -237,7 +203,7 @@
 				localStorage.setItem("techedit-paste-to-create-data", btoa(value));
 				metaKeyPressed = false;
 				var pasted = true;
-				window.location.href = "/new.html";
+				window.location.href = "/new/";
 			}
 		}
 
@@ -246,7 +212,7 @@
 	}, "keyup");
 	Mousetrap.bind("n", function() {
 
-		window.location.href = "/new.html";
+		window.location.href = "/new/";
 
 	});
 </script>

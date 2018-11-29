@@ -65,6 +65,9 @@
 	<link href="/css/techedit.css" rel="stylesheet">
 	<link href="/css/editor.css" rel="stylesheet">
 	<style>
+		body,html {
+			overflow-x:hidden;
+		}
 		#sidebar {
 			display: flex;
 			flex-flow: column;
@@ -100,7 +103,7 @@
 		<span class="navbar-text mx-3">Go to:</span>
 
 		<div class="form-inline mr-auto my-2 my-lg-0">
-			<input class="form-control" type="text" placeholder="Existing File ID" id="nav-file-id" tabindex="2">
+			<input class="form-control" type="text" placeholder="Existing File ID" id="nav-file-id">
 			<button class="btn btn-secondary" id="nav-file-id-btn">Go!</button>
 		</div>
 		<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
@@ -108,9 +111,6 @@
 				<a class="nav-link" href="/new/">New File</a>
 			</li>
 
-			<li class="nav-item">
-				<a class="nav-link" href="#">Sign in</a>
-			</li>
 		</ul>
 	</div>
 </nav>
@@ -309,7 +309,7 @@
 								<div id="settings-tab-user-main">
 									<h2>Anonymous User Data</h2>
 									<p>
-										Because you are not logged in, your settings are saved on your browser as cookies.
+										Your settings are saved on your browser as cookies.
 									</p>
 									<a class="btn btn-block btn-primary" download="techedit-localUserData.json" id="export-user-data">Export User Data</a>
 									<hr>
@@ -441,7 +441,7 @@
 			timestamp:new Date().getTime(),
 			author:userId,
 			displayName:userDisplayName
-		});l
+		});
 
 	}
 	function addUserToUserlist(username, color) {
@@ -568,6 +568,21 @@
 	}
 </script>
 <script>
+	class Techedit {
+		constructor(divs) {
+
+		}
+	}
+	(function() {
+		let techedit = {
+			loader: {
+				container: "#loader"
+			},
+			editor:{
+				container:""
+			}
+		}
+	})()
 	var editor;
 	var path = window.location.pathname.substring(1).split("/");
 	if (path[0] == "f") {
