@@ -1,2 +1,2 @@
 # Techedit
-v2.0.0 Beta
+See https://github.com/jeffreymeng/techedit
